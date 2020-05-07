@@ -3,10 +3,8 @@ import request from '@/utils/request'
 export function login(data) {
   return request({
     url: `/login?username=${data.username}&password=${data.password}`,
-    method: 'post',
-    transformResponse: [function(data) {
-      return JSON.parse(data)
-    }]
+    // url: `/login?username=admin&password=123456`,
+    method: 'post'
   })
 }
 

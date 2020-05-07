@@ -44,8 +44,7 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar',
-      'baseApi'
+      'avatar'
     ])
   },
   methods: {
