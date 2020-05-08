@@ -8,7 +8,7 @@ export default {
       data: page
     })
   },
-  exportExcel() { // 导出excel
+  exportExcel() { // 导出excel responseType 文件
     return request({
       url: `/${group_name}/export`,
       method: 'post',

@@ -35,6 +35,7 @@
     <!-- 分割线 -->
     <el-divider />
     <el-button type="danger" class="add-button" size="mini" @click="deleteByIds">批量删除</el-button>
+    <el-button type="primary" class="add-button" size="mini" @click="exportAll">全部导出</el-button>
 
     <!-- 列表 -->
     <!--
@@ -176,6 +177,24 @@ export default {
       }
       this.$message.success('操作成功: 条件查询!')
       this.getByPage()
+    },
+    exportAll() {
+      this.loading = true
+      logApi.exportExcel().then(res => {
+        const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+        const elink = document.createElement('a')
+        elink.download = '系统日志.xlsx'
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href)
+        document.body.removeChild(elink)
+        this.loading = false
+        this.$message.success('操作成功: 导出日志!')
+      }).catch(() => {
+        this.loading = false
+      })
     }
   }
 }
