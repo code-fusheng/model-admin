@@ -23,14 +23,14 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" sizi="mini" @click="getByPage">查询</el-button>
-        <el-button type="success" size="mini" @click="refresh">恢复</el-button>
+        <el-button type="primary" icon="el-icon-search" sizi="mini" @click="getByPage">查询</el-button>
+        <el-button type="success" icon="el-icon-refresh-left" size="mini" @click="refresh">恢复</el-button>
       </el-form-item>
     </el-form>
     <!-- 分割线 -->
     <el-divider />
-    <el-button type="primary" class="add-button" size="mini" @click="openAddDialog">添加</el-button>
-    <el-button type="danger" class="add-button" size="mini" @click="deleteByIds">批量删除</el-button>
+    <el-button type="primary" icon="el-icon-plus" class="add-button" size="mini" @click="openAddDialog">添加</el-button>
+    <el-button type="danger" icon="el-icon-delete" class="add-button" size="mini" @click="deleteByIds">批量删除</el-button>
 
     <!-- 列表 -->
     <!--
@@ -71,13 +71,13 @@
           <el-tag v-else type="info">弃用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="360" align="center">
+      <el-table-column label="操作" width="400" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="toUpdate(scope.row.modelPlusId)">修改</el-button>
-          <el-button size="mini" type="info" @click="toRead(scope.row.modelPlusId)">查看</el-button>
-          <el-button v-if="scope.row.isEnabled === 0" size="mini" type="success" @click="toEnable(scope.row.modelPlusId)">启用</el-button>
-          <el-button v-if="scope.row.isEnabled === 1" size="mini" type="warning" @click="toDisable(scope.row.modelPlusId)">弃用</el-button>
-          <el-button size="mini" type="danger" @click="toDelete(scope.row.modelPlusId)">删除</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-edit" @click="toUpdate(scope.row.modelPlusId)">修改</el-button>
+          <el-button size="mini" type="info" icon="el-icon-view" @click="toRead(scope.row.modelPlusId)">查看</el-button>
+          <el-button v-if="scope.row.isEnabled === 0" icon="el-icon-check" size="mini" type="success" @click="toEnable(scope.row.modelPlusId)">启用</el-button>
+          <el-button v-if="scope.row.isEnabled === 1" icon="el-icon-close" size="mini" type="warning" @click="toDisable(scope.row.modelPlusId)">弃用</el-button>
+          <el-button size="mini" type="danger" icon="el-icon-delete" @click="toDelete(scope.row.modelPlusId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

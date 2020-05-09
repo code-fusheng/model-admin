@@ -29,13 +29,13 @@
       </el-form-item>
       <!-- 表单按钮 -->
       <el-form-item>
-        <el-button type="primary" sizi="mini" @click="getByPage">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" sizi="mini" @click="getByPage">查询</el-button>
       </el-form-item>
     </el-form>
     <!-- 分割线 -->
     <el-divider />
-    <el-button type="danger" class="add-button" size="mini" @click="deleteByIds">批量删除</el-button>
-    <el-button type="primary" class="add-button" size="mini" @click="exportAll">全部导出</el-button>
+    <el-button type="danger" icon="el-icon-delete" class="add-button" size="mini" @click="deleteByIds">批量删除</el-button>
+    <el-button type="primary" icon="el-icon-download" class="add-button" size="mini" @click="exportAll">全部导出</el-button>
 
     <!-- 列表 -->
     <!--
@@ -166,18 +166,7 @@ export default {
         })
       })
     },
-    // 条件排序
-    changeSort(e) {
-      if (e.order) {
-        this.page.sortColumn = e.prop
-        this.page.sortMethod = e.order
-      } else {
-        this.page.sortColumn = ''
-        this.page.sortMethod = 'asc'
-      }
-      this.$message.success('操作成功: 条件查询!')
-      this.getByPage()
-    },
+    // 导出 excel
     exportAll() {
       this.loading = true
       logApi.exportExcel().then(res => {
@@ -191,10 +180,21 @@ export default {
         URL.revokeObjectURL(elink.href)
         document.body.removeChild(elink)
         this.loading = false
-        this.$message.success('操作成功: 导出日志!')
       }).catch(() => {
         this.loading = false
       })
+    },
+    // 条件排序
+    changeSort(e) {
+      if (e.order) {
+        this.page.sortColumn = e.prop
+        this.page.sortMethod = e.order
+      } else {
+        this.page.sortColumn = ''
+        this.page.sortMethod = 'asc'
+      }
+      this.$message.success('操作成功: 条件查询!')
+      this.getByPage()
     }
   }
 }
