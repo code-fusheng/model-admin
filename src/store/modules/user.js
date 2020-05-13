@@ -38,10 +38,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username, password: password }).then(res => {
         commit('SET_TOKEN', res.data)
-        commit('SET_NAME', res.data.userName)
-        commit('SET_USERID', res.data.userId)
-        setUserId(res.data.userId)
-        setName(res.data.userName)
         setToken(res.data)
         resolve()
       }).catch(error => {
@@ -58,6 +54,10 @@ const actions = {
         const { name, header } = data
         commit('SET_NAME', name)
         commit('SET_AVATAR', header)
+        commit('SET_NAME', res.data.userName)
+        commit('SET_USERID', res.data.userId)
+        setUserId(res.data.userId)
+        setName(res.data.userName)
         resolve(data)
       }).catch(error => {
         reject(error)
