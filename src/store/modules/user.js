@@ -1,13 +1,13 @@
-import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken, getName, setName, setUserId, getUserId } from '@/utils/auth'
+import { login, logout, getInfo } from '@/api/sys/user'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
-    name: getName(),
-    avatar: '',
-    userid: getUserId()
+    name: '',
+    header: '',
+    userId: ''
   }
 }
 
@@ -23,11 +23,11 @@ const mutations = {
   SET_NAME: (state, name) => {
     state.name = name
   },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
+  SET_HEADER: (state, header) => {
+    state.header = header
   },
-  SET_USERID: (state, userid) => {
-    state.userid = userid
+  SET_USERID: (state, userId) => {
+    state.userId = userId
   }
 }
 
@@ -37,6 +37,7 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username, password: password }).then(res => {
+        // 放到 Vuex
         commit('SET_TOKEN', res.data)
         setToken(res.data)
         resolve()
@@ -51,13 +52,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo().then(res => {
         const { data } = res
-        const { name, header } = data
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', header)
-        commit('SET_NAME', res.data.userName)
-        commit('SET_USERID', res.data.userId)
-        setUserId(res.data.userId)
-        setName(res.data.userName)
+        const { username, header, userId } = data
+        commit('SET_NAME', username)
+        commit('SET_HEADER', header)
+        commit('SET_USERID', userId)
         resolve(data)
       }).catch(error => {
         reject(error)
