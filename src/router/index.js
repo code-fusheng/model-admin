@@ -58,6 +58,27 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/article',
+    component: Layout,
+    redirect: '/article/article',
+    name: 'article',
+    meta: { title: '文章管理', icon: 'article-tool' },
+    children: [
+      {
+        path: 'category',
+        name: 'Category',
+        component: () => import('@/views/article/category/category-list'),
+        meta: { title: '分类管理', icon: 'type' }
+      },
+      {
+        path: 'article',
+        name: 'Article',
+        component: () => import('@/views/article/article/article-list'),
+        meta: { title: '文章管理', icon: 'article' }
+      }
+    ]
+  },
+  {
     path: '/model',
     component: Layout,
     redirect: '/model/model',

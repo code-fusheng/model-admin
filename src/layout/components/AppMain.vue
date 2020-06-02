@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import categoryApi from '@/api/article/category'
 export default {
   name: 'AppMain',
   computed: {
@@ -15,8 +16,14 @@ export default {
     }
   },
   created() {
+    this.getCategoryList()
   },
   methods: {
+    getCategoryList() {
+      categoryApi.list().then(res => {
+        this.$store.commit('global/SET_CATEGORY', res.data)
+      })
+    }
   }
 }
 </script>

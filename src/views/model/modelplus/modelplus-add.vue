@@ -48,7 +48,7 @@ export default {
       modelplusApi.save(this.modelPlus).then(res => {
         this.$message.success(res.msg)
         this.$emit('closeAddDialog')
-        this.model = {}
+        this.modelPlus = {}
         this.$emit('getByPage')
       })
     },
@@ -59,7 +59,7 @@ export default {
     },
     close() {
       this.$emit('closeAddDialog')
-      this.model = {}
+      this.modelPlus = {}
     }
   }
 }

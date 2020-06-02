@@ -23,7 +23,7 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" sizi="mini" @click="getByPage">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" sizi="mini" @click="search">查询</el-button>
         <el-button type="success" icon="el-icon-refresh-left" size="mini" @click="refresh">恢复</el-button>
       </el-form-item>
     </el-form>
@@ -249,8 +249,8 @@ export default {
     },
     // 操作部分相关方法
     // 修改
-    toUpdate(id) {
-      modelplusApi.get(id).then(res => {
+    toUpdate(val) {
+      modelplusApi.get(val).then(res => {
         this.modelPlus = res.data
         this.updateDialog = true
       })
@@ -312,6 +312,11 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    // 条件搜索
+    search() {
+      this.page.currentPage = 1
+      this.getByPage(this.page)
     },
     // 恢复搜索框
     refresh() {
