@@ -5,7 +5,7 @@
     <!-- 搜索栏 模糊查询-->
     <el-form :inline="true" :model="page" class="demo-form-inline" size="mini">
       <el-form-item label="模糊查询">
-        <el-input v-model="page.params.username" placeholder="username" clearable />
+        <el-input v-model="page.params.username" placeholder="请输入用户名关键字" clearable />
       </el-form-item>
       <el-form-item label="起始日期">
         <el-date-picker
@@ -47,8 +47,8 @@
       style="width: 100%"
       @sort-change="changeSort"
     >
-      <el-table-column type="index" fixed="left" label="#" width="60" align="center" />
-      <el-table-column prop="username" label="用户名称" width="150" align="center" />
+      <el-table-column type="index" fixed="left" label="#" align="center" />
+      <el-table-column prop="username" label="用户名称" align="center" />
       <el-table-column prop="header" label="头像" align="center" width="60">
         <template slot-scope="scope">
           <el-image
@@ -58,9 +58,12 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="createdTime" label="创建时间" width="200" align="center" sortable="custom" />
-      <el-table-column prop="updateTime" label="更新时间" width="200" align="center" sortable="custom" />
-      <el-table-column prop="enable" label="状态" width="100" align="center">
+      <el-table-column prop="phone" label="电话" min-width="160" align="center" />
+      <el-table-column prop="mail" label="邮箱" min-width="200" align="center" />
+      <el-table-column prop="signature" label="签名" width="200" show-overflow-tooltip align="center" />
+      <el-table-column prop="createdTime" label="创建时间" min-width="220" align="center" sortable="custom" />
+      <el-table-column prop="updateTime" label="更新时间" min-width="220" align="center" sortable="custom" />
+      <el-table-column prop="enable" label="状态" width="150" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.isEnabled === 1">启用</el-tag>
           <el-tag v-else type="info">弃用</el-tag>
@@ -69,7 +72,6 @@
       <el-table-column label="操作" width="400" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" icon="el-icon-edit" @click="toUpdate(scope.row.userId)">修改</el-button>
-          <el-button size="mini" type="info" icon="el-icon-view" @click="toRead(scope.row.userId)">查看</el-button>
           <el-button v-if="scope.row.isEnabled === 0" icon="el-icon-check" size="mini" type="success" @click="toEnable(scope.row.userId)">启用</el-button>
           <el-button v-if="scope.row.isEnabled === 1" icon="el-icon-close" size="mini" type="warning" @click="toDisable(scope.row.userId)">弃用</el-button>
           <el-button size="mini" type="danger" icon="el-icon-delete" @click="toDelete(scope.row.userId)">删除</el-button>

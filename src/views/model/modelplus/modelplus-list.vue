@@ -52,8 +52,8 @@
         align="center"
         width="45"
       />
-      <el-table-column type="index" fixed="left" label="#" width="60" align="center" />
-      <el-table-column prop="modelPlusName" label="模版名称" width="150" align="center" />
+      <el-table-column type="index" fixed="left" label="#" min-width="60" align="center" />
+      <el-table-column prop="modelPlusName" label="模版名称" min-width="150" align="center" />
       <el-table-column prop="modelPlusImage" label="图片" align="center" width="120">
         <template slot-scope="scope">
           <el-image
@@ -63,9 +63,9 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="createdTime" label="创建时间" width="180" align="center" sortable="custom" />
-      <el-table-column prop="updateTime" label="更新时间" width="180" align="center" sortable="custom" />
-      <el-table-column prop="enable" label="状态" width="80" align="center">
+      <el-table-column prop="createdTime" label="创建时间" min-width="220" align="center" sortable="custom" />
+      <el-table-column prop="updateTime" label="更新时间" min-width="220" align="center" sortable="custom" />
+      <el-table-column prop="enable" label="状态" min-width="150" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.isEnabled === 1">启用</el-tag>
           <el-tag v-else type="info">弃用</el-tag>

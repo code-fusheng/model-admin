@@ -9,16 +9,16 @@
     >
       <!-- 展开列 -->
       <el-table-column type="expand" />
-      <el-table-column prop="roleName" label="角色名称" width="150" align="center" />
-      <el-table-column prop="createdTime" label="创建时间" width="200" align="center" sortable="custom" />
-      <el-table-column prop="updateTime" label="更新时间" width="200" align="center" sortable="custom" />
-      <el-table-column prop="enable" label="状态" width="100" align="center">
+      <el-table-column prop="roleName" min-width="100" label="角色名称" align="center" />
+      <el-table-column prop="createdTime" label="创建时间" min-width="220" align="center" sortable="custom" />
+      <el-table-column prop="updateTime" label="更新时间" min-width="220" align="center" sortable="custom" />
+      <el-table-column prop="enable" label="状态" width="150" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.isEnabled === 1">启用</el-tag>
           <el-tag v-else type="info">弃用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="500" align="center">
+      <el-table-column label="操作" min-width="500" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="warning" icon="el-icon-setting">分配权限</el-button>
           <el-button size="mini" type="primary" icon="el-icon-edit">修改</el-button>

@@ -51,8 +51,8 @@
     >
       <el-table-column type="index" fixed="left" label="#" width="60" align="center" />
       <el-table-column prop="menuId" label="权限id" width="100" align="center" />
-      <el-table-column prop="name" label="权限名称" width="150" align="center" />
-      <el-table-column prop="permission" label="权限标识" width="150" align="center" />
+      <el-table-column prop="name" label="权限名称" min-width="150" align="center" />
+      <el-table-column prop="permission" label="权限标识" min-width="150" align="center" />
       <el-table-column prop="level" label="级别" width="80" align="center" sortable="custom">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.level === 1" type="danger">一级</el-tag>
@@ -61,15 +61,15 @@
         </template>
       </el-table-column>
       <el-table-column prop="pid" label="父级id" width="100" align="center" sortable="custom" />
-      <el-table-column prop="createdTime" label="创建时间" width="200" align="center" sortable="custom" />
-      <el-table-column prop="updateTime" label="更新时间" width="200" align="center" sortable="custom" />
-      <el-table-column prop="enable" label="状态" width="100" align="center">
+      <el-table-column prop="createdTime" label="创建时间" min-width="220" align="center" sortable="custom" />
+      <el-table-column prop="updateTime" label="更新时间" min-width="220" align="center" sortable="custom" />
+      <el-table-column prop="enable" label="状态" width="150" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.isEnabled === 1">启用</el-tag>
           <el-tag v-else type="info">弃用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="400" align="center">
+      <el-table-column label="操作" min-width="400" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" icon="el-icon-edit" @click="toUpdate(scope.row.menuId)">修改</el-button>
           <el-button size="mini" type="info" icon="el-icon-view" @click="toRead(scope.row.menuId)">查看</el-button>
