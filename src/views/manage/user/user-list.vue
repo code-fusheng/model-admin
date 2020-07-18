@@ -48,7 +48,10 @@
       @sort-change="changeSort"
     >
       <el-table-column type="index" fixed="left" label="#" align="center" />
-      <el-table-column prop="username" label="用户名称" align="center" />
+      <el-table-column prop="username" label="名称" align="center" />
+      <el-table-column prop="phone" label="电话" min-width="160" align="center" />
+      <el-table-column prop="mail" label="邮箱" min-width="200" align="center" />
+      <el-table-column prop="signature" label="签名" width="200" show-overflow-tooltip align="center" />
       <el-table-column prop="header" label="头像" align="center" width="60">
         <template slot-scope="scope">
           <el-image
@@ -58,9 +61,6 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="phone" label="电话" min-width="160" align="center" />
-      <el-table-column prop="mail" label="邮箱" min-width="200" align="center" />
-      <el-table-column prop="signature" label="签名" width="200" show-overflow-tooltip align="center" />
       <el-table-column prop="createdTime" label="创建时间" min-width="220" align="center" sortable="custom" />
       <el-table-column prop="updateTime" label="更新时间" min-width="220" align="center" sortable="custom" />
       <el-table-column prop="enable" label="状态" width="150" align="center">

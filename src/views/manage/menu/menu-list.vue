@@ -50,7 +50,7 @@
       @sort-change="changeSort"
     >
       <el-table-column type="index" fixed="left" label="#" width="60" align="center" />
-      <el-table-column prop="menuId" label="权限id" width="100" align="center" />
+      <el-table-column prop="menuId" label="权限id" width="100" align="center" sortable="custom" />
       <el-table-column prop="name" label="权限名称" min-width="150" align="center" />
       <el-table-column prop="permission" label="权限标识" min-width="150" align="center" />
       <el-table-column prop="level" label="级别" width="80" align="center" sortable="custom">
@@ -156,7 +156,7 @@ export default {
       // 定义page对象
       page: {
         currentPage: 1, // 当前页
-        pageSize: 10, // 每页显示条数
+        pageSize: 20, // 每页显示条数
         totalPage: 0, // 总页数
         totalCount: 0, // 总条数
         params: {}, // 查询参数对象
