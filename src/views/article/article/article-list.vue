@@ -233,6 +233,7 @@ export default {
     },
     // 恢复搜索框
     refresh() {
+      this.page.params.articleTime = null
       this.page.currentPage = 1
       this.page.params.articleTitle = null
       this.page.params.articleCategory = null

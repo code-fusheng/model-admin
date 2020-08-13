@@ -79,6 +79,33 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/operation',
+    component: Layout,
+    redirect: '/operation/comment',
+    name: 'article',
+    meta: { title: '操作管理', icon: 'operation' },
+    children: [
+      {
+        path: 'comment',
+        name: 'Comment',
+        component: () => import('@/views/operation/comment/comment-list'),
+        meta: { title: '评论管理', icon: 'comment' }
+      },
+      {
+        path: 'good',
+        name: 'Good',
+        component: () => import('@/views/operation/good/good-list'),
+        meta: { title: '点赞管理', icon: 'good' }
+      },
+      {
+        path: 'colletion',
+        name: 'Collection',
+        component: () => import('@/views/operation/collection/collection-list'),
+        meta: { title: '收藏管理', icon: 'collection' }
+      }
+    ]
+  },
+  {
     path: '/model',
     component: Layout,
     redirect: '/model/model',
