@@ -35,6 +35,7 @@
     </el-form>
     <!-- 分割线 -->
     <el-divider />
+    <el-button type="primary" class="add-button" size="mini" @click="openAddDialog">添加</el-button>
     <!-- 列表 -->
     <!--
       1. :data v-bind:model="page.list" 绑定数据 分页对象的的list数据
@@ -109,6 +110,10 @@
     <el-dialog title="修改" :visible.sync="updateDialog">
       <menu-update :menu="menu" @closeUpdateDialog="closeUpdateDialog" @getByPage="getByPage" />
     </el-dialog>
+    <!-- 添加弹窗 -->
+    <el-dialog title="添加" :visible.sync="addDialog">
+      <menu-add @closeAddDialog="closeAddDialog" @getByPage="getByPage" />
+    </el-dialog>
 
   </div>
 </template>
@@ -118,10 +123,12 @@
 import menuApi from '@/api/manage/menu'
 // 导入组件
 import menuUpdate from './menu-update'
+import menuAdd from './menu-add'
 export default {
   //  定义添加的组件 子组件/私有组件
   components: {
-    menuUpdate
+    menuUpdate,
+    menuAdd
   },
   data() {
     return {
@@ -170,6 +177,7 @@ export default {
       },
       loading: true, // 控制是否显示加载效果
       selectmenus: [], // 被选中的模版列
+      addDialog: false, // 控制添加弹窗显示
       updateDialog: false // 控制修改弹窗显示
     }
   },
@@ -284,6 +292,15 @@ export default {
       this.page.params.menuTime = null
       this.$message.success('操作成功: 条件重置！')
       this.getByPage()
+    },
+    // 模块功能组件
+    openAddDialog() {
+      // 打开添加弹窗
+      this.addDialog = true
+    },
+    closeAddDialog() {
+      // 关闭添加弹窗
+      this.addDialog = false
     },
     closeUpdateDialog() {
       // 关闭修改弹窗
