@@ -1,6 +1,6 @@
 <template>
   <!-- 加载 -->
-  <div v-loading="loading">
+  <div>
     <!-- 搜索栏 模糊查询-->
     <el-form :inline="true" :model="page" class="demo-form-inline" size="mini">
       <el-form-item label="模糊查询">
@@ -44,6 +44,7 @@
       4. @sort-change="changeSort" sort-change 事件回中可以获取当前排序的字段名[prop]和排序顺序[order]
      -->
     <el-table
+      v-loading="loading"
       :data="page.list"
       border
       fit

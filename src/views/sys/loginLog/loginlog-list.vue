@@ -1,5 +1,4 @@
 <template>
-  <!-- 加载 -->
   <div>
     <!-- 搜索栏 -->
     <!--
@@ -7,35 +6,37 @@
       2. :model -- v-bind:model="page" 动态绑定数据 此处主要用于绑定参数列表
     -->
     <el-form :inline="true" :model="page" class="demo-form-inline" size="mini">
-      <el-form-item label="请求地址">
-        <el-input v-model="page.params.logUrl" placeholder="请求地址" clearable />
-      </el-form-item>
-      <el-form-item label="请求ip">
-        <el-input v-model="page.params.logIp" placeholder="请求ip" clearable />
-      </el-form-item>
       <el-form-item label="请求状态">
-        <el-select v-model="page.params.logStatus" placeholder="请求状态" clearable filterable>
-          <el-option label="正常" :value="1" />
-          <el-option label="异常" :value="0" />
+        <el-select v-model="page.params.loginStatus" placeholder="请求状态" clearable filterable>
+          <el-option label="登录成功" :value="0" />
+          <el-option label="登录失败" :value="1" />
         </el-select>
       </el-form-item>
-      <el-form-item label="请求方式">
-        <el-select v-model="page.params.logMethod" placeholder="请求方式" clearable filterable>
-          <el-option label="GET" value="GET" />
-          <el-option label="POST" value="POST" />
-          <el-option label="PUT" value="PUT" />
-          <el-option label="DELETE" value="DELETE" />
-        </el-select>
+      <el-form-item label="起始日期">
+        <el-date-picker
+          v-model="page.params.loginLogTime"
+          type="daterange"
+          align="right"
+          unlink-panels
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="['00:00:00', '23:59:59']"
+          :picker-options="pickerOptions"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd HH:mm:ss"
+        />
       </el-form-item>
       <!-- 表单按钮 -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" sizi="mini" @click="getByPage">查询</el-button>
+        <el-button type="success" icon="el-icon-refresh-left" size="mini" @click="refresh">恢复</el-button>
       </el-form-item>
     </el-form>
     <!-- 分割线 -->
     <el-divider />
     <el-button type="danger" icon="el-icon-delete" class="add-button" size="mini" @click="deleteByIds">批量删除</el-button>
-    <el-button type="primary" icon="el-icon-download" class="add-button" size="mini" @click="exportAll">全部导出</el-button>
+    <el-button type="primary" icon="el-icon-download" disabled class="add-button" size="mini" @click="exportAll">全部导出</el-button>
 
     <!-- 列表 -->
     <!--
@@ -45,8 +46,8 @@
     <el-table
       v-loading="loading"
       :data="page.list"
-      fit
       border
+      fit
       style="width: 100%"
       @selection-change="handleSelectionChange"
       @sort-change="changeSort"
@@ -56,22 +57,26 @@
         align="center"
         width="45"
       />
-      <el-table-column prop="logId" fixed="left" label="#" width="60" align="center" />
-      <el-table-column prop="logUrl" label="请求地址" align="center" min-width="200" show-overflow-tooltip sortable="custom" />
-      <el-table-column prop="logParams" label="参数" align="center" min-width="200" show-overflow-tooltip />
-      <el-table-column prop="logStatus" label="请求状态" align="center" min-width="110" sortable="custom">
+      <el-table-column prop="loginLogId" fixed="left" label="#" min-width="60" align="center" />
+      <el-table-column prop="userName" label="用户名" align="center" min-width="150" show-overflow-tooltip sortable="custom" />
+      <el-table-column prop="ipAddress" label="IP地址" align="center" min-width="220" show-overflow-tooltip />
+      <el-table-column prop="browserType" label="浏览器" align="center" min-width="150" />
+      <el-table-column prop="osType" label="操作系统" min-width="150" align="center" show-overflow-tooltip />
+      <el-table-column prop="loginStatus" label="请求状态" align="center" min-width="150" sortable="custom">
         <!-- scope 为作用域插槽 scope.row 为当前列的对象信息 -->
         <template slot-scope="scope">
           <!-- v-if / v-else 用于条件判断 -->
-          <el-tag v-if="scope.row.logStatus === 1" type="success">正常</el-tag>
-          <el-tag v-else type="danger">异常</el-tag>
+          <el-tag v-if="scope.row.loginStatus === 0" type="success">登录成功</el-tag>
+          <el-tag v-else type="danger">登录失败</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="logMethod" label="请求方式" min-width="110" align="center" sortable="custom" />
-      <el-table-column prop="logTime" label="响应时间(毫秒)" min-width="160" align="center" sortable="custom" />
-      <el-table-column prop="logIp" label="请求ip" align="center" min-width="150" />
-      <el-table-column prop="logResult" label="返回值" min-width="300" align="center" show-overflow-tooltip />
-      <el-table-column prop="createdTime" label="创建时间" min-width="200" align="center" sortable="custom" />
+      <el-table-column prop="msg" label="消息提示" min-width="300" align="center" sortable="custom" />
+      <el-table-column prop="loginTime" label="登录时间" min-width="220" align="center" sortable="custom" />
+      <el-table-column label="操作" width="100" align="center">
+        <template slot-scope="scope">
+          <el-button size="mini" type="danger" icon="el-icon-delete" @click="toDelete(scope.row.loginLogId)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <!--
@@ -102,10 +107,38 @@
 
 <script>
 // 导入api接口定义的方法 接收变量为 xxxApi
-import logApi from '@/api/sys/log'
+import loginLogApi from '@/api/sys/loginLog'
 export default {
   data() {
     return {
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
+      loginLogTime: {},
       // 定义page对象
       page: {
         currentPage: 1, // 当前页
@@ -114,7 +147,7 @@ export default {
         totalCount: 0, // 总条数
         params: {}, // 查询参数对象
         list: [], // 数据
-        sortColumn: 'createdTime', // 排序列
+        sortColumn: 'loginTime', // 排序列
         sortMethod: 'asc' // 排序方式
       },
       loading: true, // 控制是否显示加载效果
@@ -140,7 +173,7 @@ export default {
     },
     // 分页方法 调用封装的方法 getByPage()
     getByPage() {
-      logApi.getByPage(this.page).then(res => {
+      loginLogApi.getByPage(this.page).then(res => {
         this.page = res.data
         this.loading = false
         console.log(res)
@@ -158,11 +191,11 @@ export default {
         cancelButtonText: '取消',
         type: 'error'
       }).then(() => {
-        const logIds = []
+        const loginLogIds = []
         this.selectLogs.forEach(e => {
-          logIds.push(e.logId)
+          loginLogIds.push(e.loginLogId)
         })
-        logApi.deleteByIds(logIds).then(res => {
+        loginLogApi.deleteByIds(loginLogIds).then(res => {
           this.$message.success(res.msg)
           this.getByPage()
         })
@@ -171,7 +204,7 @@ export default {
     // 导出 excel
     exportAll() {
       this.loading = true
-      logApi.exportExcel().then(res => {
+      loginLogApi.exportExcel().then(res => {
         const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
         const elink = document.createElement('a')
         elink.download = '系统日志.xlsx'
@@ -185,6 +218,32 @@ export default {
       }).catch(() => {
         this.loading = false
       })
+    },
+    // 删除
+    toDelete(id) {
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        loginLogApi.delete(id).then(res => {
+          this.$message.success(res.msg)
+          this.getByPage()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    // 恢复搜索框
+    refresh() {
+      this.page.params.loginLogTime = null
+      this.page.currentPage = 1
+      this.page.loginStatus = null
+      this.$message.success('操作成功: 条件重置！')
+      this.getByPage()
     },
     // 条件排序
     changeSort(e) {

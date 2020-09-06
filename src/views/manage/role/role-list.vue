@@ -1,7 +1,8 @@
 <template>
   <!-- 加载 -->
-  <div v-loading="loading">
+  <div>
     <el-table
+      v-loading="loading"
       :data="rolelist"
       border
       fit

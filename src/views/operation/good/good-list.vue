@@ -1,6 +1,6 @@
 <template>
   <!-- 加载 -->
-  <div v-loading="loading">
+  <div>
 
     <!-- 搜索栏 模糊查询-->
     <el-form :inline="true" :model="page" class="demo-form-inline" size="mini">
@@ -9,8 +9,9 @@
       </el-form-item>
       <el-form-item label="点赞类型">
         <el-select v-model="page.params.goodType" placeholder="点赞类型" clearable filterable>
-          <el-option label="文章的点赞" value="0" />
-          <el-option label="评论的点赞" value="1" />
+          <el-option label="默认的点赞" value="0" />
+          <el-option label="文章的点赞" value="1" />
+          <el-option label="评论的点赞" value="2" />
         </el-select>
       </el-form-item>
       <el-form-item label="起始日期">
@@ -46,6 +47,7 @@
       4. @sort-change="changeSort" sort-change 事件回中可以获取当前排序的字段名[prop]和排序顺序[order]
      -->
     <el-table
+      v-loading="loading"
       :data="page.list"
       border
       fit
@@ -140,7 +142,7 @@ export default {
       // 定义page对象
       page: {
         currentPage: 1, // 当前页
-        pageSize: 20, // 每页显示条数
+        pageSize: 10, // 每页显示条数
         totalPage: 0, // 总页数
         totalCount: 0, // 总条数
         params: {}, // 查询参数对象

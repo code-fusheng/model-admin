@@ -140,6 +140,12 @@ export const constantRoutes = [
         meta: { title: '系统日志', icon: 'sys-log' }
       },
       {
+        path: 'loginLog',
+        name: 'Loginlog',
+        component: () => import('@/views/sys/loginLog/loginlog-list'),
+        meta: { title: '登录日志', icon: 'sys-log' }
+      },
+      {
         path: 'swagger',
         name: 'Swagger',
         component: () => import('@/views/sys/swagger/swagger-index'),
