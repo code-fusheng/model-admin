@@ -49,6 +49,12 @@ export default {
       method: 'get'
     })
   },
+  getMenuTree() { // 查询可用权限列表
+    return request({
+      url: `/${group_name}/getMenuTree`,
+      method: 'get'
+    })
+  },
   enable(id) { // 根据id启用
     return request({
       url: `/${group_name}/enable/${id}`,

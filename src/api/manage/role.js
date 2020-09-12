@@ -29,6 +29,13 @@ export default {
       data: id
     })
   },
+  getMenuIdsByRoleId(roleId) { // 根据角色id获取菜单权限ids
+    return request({
+      url: `/${group_name}/getMenuIdsByRoleId/${roleId}`,
+      method: 'get',
+      data: roleId
+    })
+  },
   list() { // 查询所有
     return request({
       url: `/${group_name}/list`,

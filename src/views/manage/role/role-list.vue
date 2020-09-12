@@ -47,7 +47,7 @@
       </el-table-column>
       <el-table-column label="操作" min-width="500" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="warning" icon="el-icon-setting">分配权限</el-button>
+          <el-button size="mini" type="warning" icon="el-icon-setting" @click="handleSelectMenu(scope.row)">分配权限</el-button>
           <el-button size="mini" type="primary" icon="el-icon-edit">修改</el-button>
           <el-button size="mini" type="info" icon="el-icon-view">查看</el-button>
           <el-button v-if="scope.row.isEnabled === 0" icon="el-icon-check" size="mini" type="success">启用</el-button>
@@ -56,15 +56,47 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!-- 分配权限和菜单弹出层开始 -->
+    <el-dialog
+      title="分配权限和菜单"
+      :visible.sync="selectMenuOpen"
+      width="400px"
+      center
+      append-to-body
+    >
+      <el-tree
+        ref="menu"
+        :data="menuOptions"
+        show-checkbox
+        node-key="menuId"
+        highlight-current
+        empty-text="加载中，请稍后"
+        :props="{id:'menuId',children:'children',label:'name'}"
+      />
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleSelectMenuSubmit">确 定</el-button>
+        <el-button @click="cancelSelectMenu">取 消</el-button>
+      </span>
+    </el-dialog>
+    <!-- 分配权限和菜单弹出层结束 -->
+
   </div>
 </template>
 
 <script>
 import roleApi from '@/api/manage/role'
+import menuApi from '@/api/manage/menu'
 export default {
   data() {
     return {
       loading: true, // 控制是否显示加载效果
+      // 当前选中持角色ID
+      currentRoleId: undefined,
+      // 是否打开分配权限的弹出层
+      selectMenuOpen: false,
+      // 菜单树的数据
+      menuOptions: [],
       rolelist: []
     }
   },
@@ -82,7 +114,36 @@ export default {
         console.log(res)
       })
     },
-    removeRightById() {}
+    removeRightById() {},
+    // 打开分配权限和菜单的弹出层
+    handleSelectMenu(row) {
+      this.currentRoleId = row.roleId || this.ids[0]
+      this.title = '分配权限和菜单'
+      this.selectMenuOpen = true
+      // 查询所有可用的菜单
+      menuApi.getMenuTree().then(res => {
+        this.menuOptions = this.handleTree(res.data, 'menuId')
+      })
+      // 根据角色ID查询当前角色拥有的哪些菜单权限
+      roleApi.getMenuIdsByRoleId(this.currentRoleId).then(res => {
+        this.$refs.menu.setCheckedKeys(res.data)
+      })
+    },
+    // 保存角色和菜单权限的关系
+    handleSelectMenuSubmit() {
+      // 获取选中的keys
+      const checkedKeys = this.$refs.menu.getCheckedKeys()
+      // 获取半选的keys
+      const halfCheckKeys = this.$refs.menu.getHalfCheckedKeys()
+      // 组合成最后的keys
+      const finalKey = halfCheckKeys.concat(checkedKeys)
+      console.log(finalKey)
+    },
+    // 关闭分配权限和菜单的弹出层
+    cancelSelectMenu() {
+      this.selectMenuOpen = false
+      this.menuOptions = []
+    }
   }
 }
 </script>
