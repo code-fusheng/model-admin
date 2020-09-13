@@ -1,11 +1,22 @@
 <template>
-  <!-- 加载 -->
   <div>
-
     <!-- 搜索栏 模糊查询-->
     <el-form :inline="true" :model="page" class="demo-form-inline" size="mini">
-      <el-form-item label="模糊查询">
-        <el-input v-model="page.params.username" placeholder="请输入用户名关键字" clearable />
+      <el-form-item label="用户名">
+        <el-input v-model="page.params.username" placeholder="请输入用户名" clearable />
+      </el-form-item>
+      <el-form-item label="用户性别">
+        <el-select v-model="page.params.sex" placeholder="评论状态" clearable filterable>
+          <el-option label="私密" :value="0" />
+          <el-option label="男" :value="1" />
+          <el-option label="女" :value="2" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="用户状态">
+        <el-select v-model="page.params.isEnabled" placeholder="评论状态" clearable filterable>
+          <el-option label="启用" :value="1" />
+          <el-option label="弃用" :value="0" />
+        </el-select>
       </el-form-item>
       <el-form-item label="起始日期">
         <el-date-picker
@@ -31,8 +42,8 @@
     <el-divider />
     <el-button type="primary" icon="el-icon-plus" class="add-button" size="mini" @click="openAddDialog">添加</el-button>
     <el-button type="danger" icon="el-icon-delete" class="add-button" size="mini" @click="deleteByIds">批量删除</el-button>
-    <el-button type="warning" icon="el-icon-refresh-left" class="add-button" size="mini" @click="deleteByIds">重置密码</el-button>
-
+    <el-button type="warning" icon="el-icon-refresh-left" class="add-button" size="mini">重置密码</el-button>
+    <el-button type="success" icon="el-icon-thumb" size="mini">分配角色</el-button>
     <!-- 列表 -->
     <!--
       1. :data v-bind:model="page.list" 绑定数据 分页对象的的list数据
@@ -48,11 +59,40 @@
       style="width: 100%"
       @sort-change="changeSort"
     >
-      <el-table-column type="index" fixed="left" label="#" align="center" />
-      <el-table-column prop="username" label="名称" align="center" />
+      <el-table-column
+        type="selection"
+        align="center"
+        width="45"
+      />
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="真实姓名">
+              <span>{{ props.row.realname }}</span>
+            </el-form-item>
+            <el-form-item label="签名">
+              <span>{{ props.row.signature }}</span>
+            </el-form-item>
+            <el-form-item label="描述">
+              <span>{{ props.row.description }}</span>
+            </el-form-item>
+            <el-form-item label="地址">
+              <span>{{ props.row.address }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <el-table-column type="index" label="#" align="center" />
+      <el-table-column prop="username" label="用户名(账号)" min-width="150" align="center" />
       <el-table-column prop="phone" label="电话" min-width="160" align="center" />
       <el-table-column prop="mail" label="邮箱" min-width="200" align="center" />
-      <el-table-column prop="signature" label="签名" width="200" show-overflow-tooltip align="center" />
+      <el-table-column prop="sex" label="状态" width="150" align="center">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.sex === 0" type="info">私密</el-tag>
+          <el-tag v-if="scope.row.sex === 1">男</el-tag>
+          <el-tag v-if="scope.row.sex === 2" type="danger">女</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="header" label="头像" align="center" width="60">
         <template slot-scope="scope">
           <el-image
@@ -72,10 +112,11 @@
       </el-table-column>
       <el-table-column label="操作" width="400" align="center">
         <template slot-scope="scope">
+          <el-button v-if="scope.row.userId!=1" type="success" icon="el-icon-thumb" size="mini">分配角色</el-button>
           <el-button size="mini" type="primary" icon="el-icon-edit" @click="toUpdate(scope.row.userId)">修改</el-button>
           <el-button v-if="scope.row.isEnabled === 0" icon="el-icon-check" size="mini" type="success" @click="toEnable(scope.row.userId)">启用</el-button>
-          <el-button v-if="scope.row.isEnabled === 1" icon="el-icon-close" size="mini" type="warning" @click="toDisable(scope.row.userId)">弃用</el-button>
-          <el-button size="mini" type="danger" icon="el-icon-delete" @click="toDelete(scope.row.userId)">删除</el-button>
+          <el-button v-if="scope.row.isEnabled === 1 && scope.row.userId != 1" icon="el-icon-close" size="mini" type="warning" @click="toDisable(scope.row.userId)">弃用</el-button>
+          <el-button v-if="scope.row.userId != 1" size="mini" type="danger" icon="el-icon-delete" @click="toDelete(scope.row.userId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -104,14 +145,14 @@
     />
 
     <!-- 添加弹窗 -->
-    <el-dialog title="添加" :visible.sync="addDialog">
+    <el-dialog title="添加用户" :visible.sync="addDialog" width="800px" center>
       <user-add @closeAddDialog="closeAddDialog" @getByPage="getByPage" />
     </el-dialog>
     <!--
       修改弹窗
       :model="model" 用于传递参数对象
     -->
-    <el-dialog title="修改" :visible.sync="updateDialog">
+    <el-dialog title="修改用户" :visible.sync="updateDialog" width="800px" center>
       <user-update :user="user" @closeUpdateDialog="closeUpdateDialog" @getByPage="getByPage" />
     </el-dialog>
 
@@ -159,6 +200,10 @@ export default {
           }
         }]
       },
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
       userTime: {},
       // 定义page对象
       page: {
@@ -337,3 +382,17 @@ export default {
 }
 </script>
 
+<style scoped>
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+</style>

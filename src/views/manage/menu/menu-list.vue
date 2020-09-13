@@ -105,11 +105,11 @@
       修改弹窗
       :model="model" 用于传递参数对象
     -->
-    <el-dialog title="修改权限" :visible.sync="updateDialog" width="600px">
+    <el-dialog title="修改权限" :visible.sync="updateDialog" width="600px" center>
       <menu-update :menu="menu" @closeUpdateDialog="closeUpdateDialog" @getByPage="getByPage" />
     </el-dialog>
     <!-- 添加弹窗 -->
-    <el-dialog title="添加权限" :visible.sync="addDialog" width="600px">
+    <el-dialog title="添加权限" :visible.sync="addDialog" width="600px" center>
       <menu-add @closeAddDialog="closeAddDialog" @getByPage="getByPage" />
     </el-dialog>
 

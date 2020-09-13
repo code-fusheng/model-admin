@@ -8,11 +8,11 @@ export default {
       data: role
     })
   },
-  delete(id) { // 根据id删除
+  delete(roleId) { // 根据id删除
     return request({
-      url: `/${group_name}/deleteById/${id}`,
+      url: `/${group_name}/deleteById/${roleId}`,
       method: 'delete',
-      data: id
+      data: roleId
     })
   },
   update(role) { // 修改更新
@@ -22,11 +22,11 @@ export default {
       data: role
     })
   },
-  get(id) { // 根据id查询
+  get(roleId) { // 根据id查询
     return request({
-      url: `/${group_name}/getById/${id}`,
+      url: `/${group_name}/getById/${roleId}`,
       method: 'get',
-      data: id
+      data: roleId
     })
   },
   getMenuIdsByRoleId(roleId) { // 根据角色id获取菜单权限ids
@@ -36,24 +36,36 @@ export default {
       data: roleId
     })
   },
+  // 保存角色和菜单权限之间的关系
+  saveRoleMenu(roleId, menuIds) {
+    // 处理如果没有选择菜单数据。无法匹配后台数据的问题
+    if (menuIds.length === 0) {
+      menuIds = [-1]
+    }
+    return request({
+      url: `/${group_name}/saveRoleMenu/${roleId}/${menuIds}`,
+      method: 'post',
+      data: roleId, menuIds
+    })
+  },
   list() { // 查询所有
     return request({
       url: `/${group_name}/list`,
       method: 'get'
     })
   },
-  enable(id) { // 根据id启用
+  enable(roleId) { // 根据id启用
     return request({
-      url: `/${group_name}/enable/${id}`,
+      url: `/${group_name}/enable/${roleId}`,
       method: 'put',
-      data: id
+      data: roleId
     })
   },
-  disable(id) { // 根据id弃用
+  disable(roleId) { // 根据id弃用
     return request({
-      url: `/${group_name}/disable/${id}`,
+      url: `/${group_name}/disable/${roleId}`,
       method: 'put',
-      data: id
+      data: roleId
     })
   }
 }

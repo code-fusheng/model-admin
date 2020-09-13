@@ -1,6 +1,7 @@
 <template>
   <!-- 加载 -->
   <div>
+    <el-button type="primary" icon="el-icon-plus" class="add-button" size="mini" @click="openAddDialog">添加</el-button>
     <el-table
       v-loading="loading"
       :data="rolelist"
@@ -45,14 +46,14 @@
           <el-tag v-else type="info">弃用</el-tag>
         </template>
       </el-table-column>
+      <el-table-column prop="remark" min-width="100" label="备注" align="center" />
       <el-table-column label="操作" min-width="500" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="warning" icon="el-icon-setting" @click="handleSelectMenu(scope.row)">分配权限</el-button>
-          <el-button size="mini" type="primary" icon="el-icon-edit">修改</el-button>
-          <el-button size="mini" type="info" icon="el-icon-view">查看</el-button>
-          <el-button v-if="scope.row.isEnabled === 0" icon="el-icon-check" size="mini" type="success">启用</el-button>
-          <el-button v-if="scope.row.isEnabled === 1" icon="el-icon-close" size="mini" type="warning">弃用</el-button>
-          <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-edit" @click="toUpdate(scope.row.roleId)">修改</el-button>
+          <el-button v-if="scope.row.isEnabled === 0" icon="el-icon-check" size="mini" type="success" @click="toEnable(scope.row.roleId)">启用</el-button>
+          <el-button v-if="scope.row.isEnabled === 1" icon="el-icon-close" size="mini" type="warning" @click="toDisable(scope.row.roleId)">弃用</el-button>
+          <el-button size="mini" type="danger" icon="el-icon-delete" @click="toDelete(scope.row.roleId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -81,16 +82,40 @@
     </el-dialog>
     <!-- 分配权限和菜单弹出层结束 -->
 
+    <!-- 添加弹窗 -->
+    <el-dialog title="添加角色" :visible.sync="addDialog" width="600px" center>
+      <role-add @closeAddDialog="closeAddDialog" @list="list" />
+    </el-dialog>
+    <!--
+      修改弹窗
+      :model="model" 用于传递参数对象
+    -->
+    <el-dialog title="修改角色" :visible.sync="updateDialog" width="600px" center>
+      <role-update :role="role" @closeUpdateDialog="closeUpdateDialog" @list="list" />
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import roleApi from '@/api/manage/role'
 import menuApi from '@/api/manage/menu'
+// 导入组件
+// 导入组件
+import RoleAdd from './role-add'
+import RoleUpdate from './role-update'
 export default {
+  //  定义添加的组件 子组件/私有组件
+  components: {
+    RoleAdd,
+    RoleUpdate
+  },
   data() {
     return {
+      role: {},
       loading: true, // 控制是否显示加载效果
+      addDialog: false, // 控制添加弹窗显示
+      updateDialog: false, // 控制修改弹窗显示
       // 当前选中持角色ID
       currentRoleId: undefined,
       // 是否打开分配权限的弹出层
@@ -106,12 +131,73 @@ export default {
   },
   // 定义方法
   methods: {
-    // 分页方法 调用封装的方法 getByPage()
+    // list()
     list() {
       roleApi.list().then(res => {
         this.rolelist = res.data
         this.loading = false
         console.log(res)
+      })
+    },
+    // 修改
+    toUpdate(val) {
+      roleApi.get(val).then(res => {
+        this.role = res.data
+        this.updateDialog = true
+      })
+    },
+    // 启用
+    toEnable(roleId) {
+      this.$confirm('是否启用？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        roleApi.enable(roleId).then(res => {
+          this.$message.success(res.msg)
+          this.list()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消启用'
+        })
+      })
+    },
+    // 弃用
+    toDisable(roleId) {
+      this.$confirm('是否弃用?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        roleApi.disable(roleId).then(res => {
+          this.$message.success(res.msg)
+          this.list()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消弃用'
+        })
+      })
+    },
+    // 删除
+    toDelete(roleId) {
+      this.$confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        roleApi.delete(roleId).then(res => {
+          this.$message.success(res.msg)
+          this.list()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     },
     removeRightById() {},
@@ -138,11 +224,29 @@ export default {
       // 组合成最后的keys
       const finalKey = halfCheckKeys.concat(checkedKeys)
       console.log(finalKey)
+      roleApi.saveRoleMenu(this.currentRoleId, finalKey).then(res => {
+        this.msgSuccess('分配成功')
+      }).catch(() => {
+        this.msgSuccess('分配失败')
+      })
     },
     // 关闭分配权限和菜单的弹出层
     cancelSelectMenu() {
       this.selectMenuOpen = false
       this.menuOptions = []
+    },
+    // 模块功能组件
+    openAddDialog() {
+      // 打开添加弹窗
+      this.addDialog = true
+    },
+    closeAddDialog() {
+      // 关闭添加弹窗
+      this.addDialog = false
+    },
+    closeUpdateDialog() {
+      // 关闭修改弹窗
+      this.updateDialog = false
     }
   }
 }

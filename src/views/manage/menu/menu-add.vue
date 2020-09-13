@@ -3,7 +3,7 @@
     <!--添加权限/菜单  -->
     <el-form ref="form" :model="menu" :rules="rules" label-width="80px" class="demo-ruleForm">
       <el-row :gutter="20">
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="上级菜单" prop="name">
             <treeselect
               v-model="menu.pid"
@@ -14,14 +14,14 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="权限Id" prop="menuId">
-            <el-input v-model="menu.menuId" placeholder="请输入权限Id" />
+        <el-col :span="12">
+          <el-form-item label="父级权限" prop="pid">
+            <el-input v-model="menu.pid" placeholder="请选择父级权限" />
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="父级权限" prop="pid">
-            <el-input v-model="menu.pid" placeholder="请选择父级权限" />
+          <el-form-item label="权限Id" prop="menuId">
+            <el-input v-model="menu.menuId" placeholder="请输入权限Id" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -130,14 +130,12 @@ export default {
       menuApi.save(this.menu).then(res => {
         this.$message.success(res.msg)
         this.$emit('closeAddDialog')
-        this.menu = {}
         this.$emit('getByPage')
         this.resetForm('form')
       })
     },
     close() {
       this.$emit('closeAddDialog')
-      this.menu = {}
       this.resetForm('form')
     }
   }
