@@ -61,7 +61,7 @@
         width="45"
       />
       <el-table-column type="index" fixed="left" label="#" min-width="60" align="center" />
-      <el-table-column prop="targetDesc" label="点赞内容" min-width="250" align="center" show-overflow-tooltip />
+      <el-table-column prop="targetDesc" label="点赞内容" min-width="300" align="center" show-overflow-tooltip />
       <el-table-column prop="goodTarget" label="点赞目标id" min-width="150" align="center" />
       <el-table-column prop="username" label="点赞人(执行者)" min-width="150" align="center" />
       <el-table-column prop="goodUserId" label="点赞人id" min-width="150" align="center" />
@@ -72,9 +72,9 @@
           <el-tag v-else-if="scope.row.goodType === 2" type="success">评论的点赞</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="400" align="center">
+      <el-table-column label="操作" min-width="100" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="success" icon="el-icon-view" @click="toRead(scope.row.goodId)">查看</el-button>
+          <!-- <el-button size="mini" type="success" icon="el-icon-view" @click="toRead(scope.row.goodId)">查看</el-button> -->
           <el-button size="mini" type="danger" icon="el-icon-delete" @click="toDelete(scope.row.goodId)">删除</el-button>
         </template>
       </el-table-column>

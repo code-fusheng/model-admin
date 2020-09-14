@@ -24,9 +24,19 @@
             <el-input v-model="menu.menuId" disabled="" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="权限名称" prop="name">
             <el-input v-model="menu.name" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="权限标识" prop="permission">
+            <el-input v-model="menu.permission" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="权限路径" prop="path">
+            <el-input v-model="menu.path" placeholder="请输入权限路径" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -36,11 +46,6 @@
               <el-option label="二级" :value="2" />
               <el-option label="三级" :value="3" />
             </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="权限标识" prop="permission">
-            <el-input v-model="menu.permission" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -90,6 +95,9 @@ export default {
         ],
         permission: [
           { required: true, message: '权限标识不能为空', tirgger: 'blur' }
+        ],
+        path: [
+          { required: true, message: '权限路径不能为空', tirgger: 'blur' }
         ],
         level: [
           { required: true, message: '请选择权限级别' }

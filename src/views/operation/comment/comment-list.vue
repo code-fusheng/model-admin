@@ -66,7 +66,7 @@
         width="45"
       />
       <el-table-column type="index" fixed="left" label="#" min-width="60" align="center" />
-      <el-table-column prop="commentContent" label="评论内容" min-width="150" align="center" />
+      <el-table-column prop="commentContent" label="评论内容" min-width="300" align="center" />
       <el-table-column prop="username" label="评论人" min-width="150" align="center" />
       <el-table-column prop="commentTarget" label="评论目标id" min-width="150" align="center" />
       <el-table-column prop="commentRoot" label="评论根id" min-width="150" align="center" />
@@ -83,10 +83,10 @@
           <el-tag v-else type="info">异常</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="400" align="center">
+      <el-table-column label="操作" min-width="300" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" icon="el-icon-edit" @click="toUpdate(scope.row.commentId)">修改</el-button>
-          <el-button size="mini" type="success" icon="el-icon-view" @click="toRead(scope.row.commentId)">查看</el-button>
+          <!-- <el-button size="mini" type="primary" icon="el-icon-edit" @click="toUpdate(scope.row.commentId)">修改</el-button>
+          <el-button size="mini" type="success" icon="el-icon-view" @click="toRead(scope.row.commentId)">查看</el-button> -->
           <el-button size="mini" type="warning" icon="el-icon-delete">举报</el-button>
           <el-button size="mini" type="danger" icon="el-icon-delete" @click="toDelete(scope.row.commentId)">删除</el-button>
         </template>

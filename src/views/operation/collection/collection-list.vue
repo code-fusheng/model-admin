@@ -60,7 +60,7 @@
         width="45"
       />
       <el-table-column type="index" fixed="left" label="#" min-width="60" align="center" />
-      <el-table-column prop="targetDesc" label="收藏内容" min-width="250" align="center" show-overflow-tooltip />
+      <el-table-column prop="targetDesc" label="收藏内容" min-width="300" align="center" show-overflow-tooltip />
       <el-table-column prop="collectionTarget" label="收藏目标id" min-width="150" align="center" />
       <el-table-column prop="username" label="收藏人(执行者)" min-width="150" align="center" />
       <el-table-column prop="collectionUserId" label="收藏人id" min-width="150" align="center" />
@@ -71,9 +71,9 @@
           <el-tag v-else-if="scope.row.collectionType === 2" type="success">评论的收藏</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="400" align="center">
+      <el-table-column label="操作" min-width="100" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="success" icon="el-icon-view" @click="toRead(scope.row.collectionId)">查看</el-button>
+          <!-- <el-button size="mini" type="success" icon="el-icon-view" @click="toRead(scope.row.collectionId)">查看</el-button> -->
           <el-button size="mini" type="danger" icon="el-icon-delete" @click="toDelete(scope.row.collectionId)">删除</el-button>
         </template>
       </el-table-column>

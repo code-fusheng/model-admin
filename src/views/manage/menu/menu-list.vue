@@ -53,6 +53,7 @@
       <el-table-column prop="menuId" label="权限Id" width="100" align="center" sortable="custom" fixed="left" />
       <el-table-column prop="name" label="权限名称" min-width="180" align="center" />
       <el-table-column prop="permission" label="权限标识" min-width="180" align="center" />
+      <el-table-column prop="path" label="权限路径" min-width="180" align="center" />
       <el-table-column prop="level" label="级别" min-width="150" align="center" sortable="custom">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.level === 1" type="danger">一级</el-tag>
@@ -248,7 +249,7 @@ export default {
     },
     // 弃用
     toDisable(id) {
-      this.$confirm('是否弃用?', '提示', {
+      this.$confirm('是否弃用（还没做）?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -266,7 +267,7 @@ export default {
     },
     // 删除
     toDelete(id) {
-      this.$confirm('是否删除?', '提示', {
+      this.$confirm('是否删除（还没做）?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
