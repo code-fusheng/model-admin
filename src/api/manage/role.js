@@ -29,11 +29,27 @@ export default {
       data: roleId
     })
   },
-  getMenuIdsByRoleId(roleId) { // 根据角色id获取菜单权限ids
+  // 查询所有可用角色
+  selectAllRole() {
+    return request({
+      url: `/${group_name}/selectAllRole`,
+      method: 'get'
+    })
+  },
+  // 根据角色id获取菜单权限ids
+  getMenuIdsByRoleId(roleId) {
     return request({
       url: `/${group_name}/getMenuIdsByRoleId/${roleId}`,
       method: 'get',
       data: roleId
+    })
+  },
+  // 根据用户id获取角色ids
+  getRoleIdsByUserId(userId) {
+    return request({
+      url: `/${group_name}/getRoleIdsByUserId/${userId}`,
+      method: 'get',
+      data: userId
     })
   },
   // 保存角色和菜单权限之间的关系
@@ -46,6 +62,18 @@ export default {
       url: `/${group_name}/saveRoleMenu/${roleId}/${menuIds}`,
       method: 'post',
       data: roleId, menuIds
+    })
+  },
+  // 保存用户和角色之间的关系
+  saveUserRole(userId, roleIds) {
+    // 处理如果没有选择角色数据。无法匹配后台数据的问题
+    if (roleIds.length === 0) {
+      roleIds = [-1]
+    }
+    return request({
+      url: `/${group_name}/saveUserRole/${userId}/${roleIds}`,
+      method: 'post',
+      data: userId, roleIds
     })
   },
   list() { // 查询所有

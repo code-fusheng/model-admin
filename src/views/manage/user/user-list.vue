@@ -43,7 +43,6 @@
     <el-button type="primary" icon="el-icon-plus" class="add-button" size="mini" @click="openAddDialog">添加</el-button>
     <el-button type="danger" icon="el-icon-delete" class="add-button" size="mini" @click="deleteByIds">批量删除</el-button>
     <el-button type="warning" icon="el-icon-refresh-left" class="add-button" size="mini">重置密码</el-button>
-    <el-button type="success" icon="el-icon-thumb" size="mini">分配角色</el-button>
     <!-- 列表 -->
     <!--
       1. :data v-bind:model="page.list" 绑定数据 分页对象的的list数据
@@ -112,7 +111,7 @@
       </el-table-column>
       <el-table-column label="操作" width="400" align="center">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.userId!=1" type="success" icon="el-icon-thumb" size="mini">分配角色</el-button>
+          <el-button v-if="scope.row.userId!=1" type="success" icon="el-icon-thumb" size="mini" @click="handleSelectRole(scope.row)">分配角色</el-button>
           <el-button size="mini" type="primary" icon="el-icon-edit" @click="toUpdate(scope.row.userId)">修改</el-button>
           <el-button v-if="scope.row.isEnabled === 0" icon="el-icon-check" size="mini" type="success" @click="toEnable(scope.row.userId)">启用</el-button>
           <el-button v-if="scope.row.isEnabled === 1 && scope.row.userId != 1" icon="el-icon-close" size="mini" type="warning" @click="toDisable(scope.row.userId)">弃用</el-button>
@@ -143,6 +142,32 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+    <!-- 分配角色的弹出层开始 -->
+    <el-dialog
+      title="分配角色"
+      :visible.sync="selectRoleOpen"
+      width="900px"
+      center
+      append-to-body
+    >
+      <el-table
+        ref="roleListTable"
+        border
+        :data="roleTableList"
+        @selection-change="handleRoleTableSelectionChange"
+      >
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="角色ID" align="center" prop="roleId" />
+        <el-table-column label="角色名称" align="center" prop="roleName" />
+        <el-table-column label="备注" align="center" prop="remark" />
+        <el-table-column label="创建时间" align="center" prop="createdTime" />
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleSaveUserRoleSubmit">确 定</el-button>
+        <el-button @click="cancelUserRole">取 消</el-button>
+      </span>
+    </el-dialog>
+    <!-- 分配角色的弹出层结束 -->
 
     <!-- 添加弹窗 -->
     <el-dialog title="添加用户" :visible.sync="addDialog" width="800px" center>
@@ -162,6 +187,7 @@
 <script>
 // 导入api接口定义的方法 接收变量为 userApi
 import userApi from '@/api/manage/user'
+import roleApi from '@/api/manage/role'
 // 导入组件
 import UserAdd from './user-add'
 import UserUpdate from './user-update'
@@ -224,7 +250,15 @@ export default {
       loading: true, // 控制是否显示加载效果
       selectusers: [], // 被选中的模版列
       addDialog: false, // 控制添加弹窗显示
-      updateDialog: false // 控制修改弹窗显示
+      updateDialog: false, // 控制修改弹窗显示
+      // 是否显示分配权限的弹出层
+      selectRoleOpen: false,
+      // roleIds 分配角色列表选择状态
+      roleIds: [],
+      // 角色数据
+      roleTableList: [],
+      // 当前选中的用户
+      currentUserId: undefined
     }
   },
   // 初始化函数
@@ -364,7 +398,43 @@ export default {
       this.$message.success('操作成功: 条件重置！')
       this.getByPage()
     },
-
+    // 打开分配角色的弹出层
+    handleSelectRole(row) {
+      this.selectRoleOpen = true
+      this.currentUserId = row.userId || this.ids[0]
+      const tx = this
+      roleApi.selectAllRole().then(res => {
+        tx.roleTableList = res.data
+        this.$nextTick(() => {
+          // 根据当前用户查找之前拥有的角色IDS
+          roleApi.getRoleIdsByUserId(tx.currentUserId).then(res2 => {
+            res2.data.filter(r1 => {
+              tx.roleTableList.filter(r2 => {
+                if (r1 === r2.roleId) {
+                  // 选中表格checkbox
+                  tx.$refs.roleListTable.toggleRowSelection(r2, true)
+                }
+              })
+            })
+          })
+        })
+      })
+    },
+    cancelUserRole() {
+      this.selectRoleOpen = false
+    },
+    // 数据表格的多选择框选择时触发
+    handleRoleTableSelectionChange(selection) {
+      this.roleIds = selection.map(item => item.roleId)
+    },
+    // 保存用户和角色之间的关系
+    handleSaveUserRoleSubmit() {
+      roleApi.saveUserRole(this.currentUserId, this.roleIds).then(res => {
+        this.msgSuccess('分配成功')
+      }).catch(function() {
+        this.msgError('分配失败')
+      })
+    },
     // 模块功能组件
     openAddDialog() {
       // 打开添加弹窗
