@@ -453,6 +453,9 @@ export default {
 </script>
 
 <style scoped>
+  .demo-form-inline {
+    padding-top: 10px;
+  }
   .demo-table-expand {
     font-size: 0;
   }
