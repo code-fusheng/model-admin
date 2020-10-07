@@ -204,6 +204,7 @@ export default {
     },
     // 分页方法 调用封装的方法 getByPage()
     getByPage() {
+      this.page.list = []
       modelplusApi.getByPage(this.page).then(res => {
         this.page = res.data
         this.loading = false

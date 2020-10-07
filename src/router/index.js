@@ -140,6 +140,12 @@ export const constantRoutes = [
         meta: { title: '系统日志', icon: 'sys-log' }
       },
       {
+        path: 'operaLog',
+        name: 'OperaLog',
+        component: () => import('@/views/sys/operaLog/operalog-list'),
+        meta: { title: '操作日志', icon: 'sys-log' }
+      },
+      {
         path: 'loginLog',
         name: 'Loginlog',
         component: () => import('@/views/sys/loginLog/loginlog-list'),
