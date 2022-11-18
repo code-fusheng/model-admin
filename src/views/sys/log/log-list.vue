@@ -42,20 +42,8 @@
       1. :data 绑定数据 分页对象的的list数据
       2. show-overflow-tooltip 超出部分隐藏
      -->
-    <el-table
-      v-loading="loading"
-      :data="page.list"
-      fit
-      border
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-      @sort-change="changeSort"
-    >
-      <el-table-column
-        type="selection"
-        align="center"
-        width="45"
-      />
+    <el-table v-loading="loading" :data="page.list" fit border style="width: 100%" @selection-change="handleSelectionChange" @sort-change="changeSort">
+      <el-table-column type="selection" align="center" width="45" />
       <el-table-column prop="logId" fixed="left" label="#" width="60" align="center" />
       <el-table-column prop="logUrl" label="请求地址" align="center" min-width="200" show-overflow-tooltip sortable="custom" />
       <el-table-column prop="logParams" label="参数" align="center" min-width="200" show-overflow-tooltip />
@@ -89,14 +77,13 @@
       align="center"
       class="pagination"
       :current-page="page.currentPage"
-      :page-sizes="[10,20,50,100]"
+      :page-sizes="[10, 20, 50, 100]"
       :page-size="page.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="page.totalCount"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
-
   </div>
 </template>
 
@@ -171,20 +158,23 @@ export default {
     // 导出 excel
     exportAll() {
       this.loading = true
-      logApi.exportExcel().then(res => {
-        const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
-        const elink = document.createElement('a')
-        elink.download = '系统日志.xlsx'
-        elink.style.display = 'none'
-        elink.href = URL.createObjectURL(blob)
-        document.body.appendChild(elink)
-        elink.click()
-        URL.revokeObjectURL(elink.href)
-        document.body.removeChild(elink)
-        this.loading = false
-      }).catch(() => {
-        this.loading = false
-      })
+      logApi
+        .exportExcel()
+        .then(res => {
+          const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+          const elink = document.createElement('a')
+          elink.download = '系统日志.xlsx'
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          URL.revokeObjectURL(elink.href)
+          document.body.removeChild(elink)
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
     },
     // 条件排序
     changeSort(e) {

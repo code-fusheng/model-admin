@@ -20,7 +20,7 @@ export function addDateRange(params, dateRange) {
 // 状态翻译 datas是当前状态数据列表 value要翻译的值
 export function selectDictLabel(datas, value) {
   var actions = []
-  Object.keys(datas).map((key) => {
+  Object.keys(datas).map(key => {
     if (datas[key].dictValue === value) {
       actions.push(datas[key].dictLabel)
       return false
@@ -29,13 +29,13 @@ export function selectDictLabel(datas, value) {
   return actions.join('')
 }
 /** *
-   * 构造树的数据结构
-   * @param data 要构造的数据源
-   * @param id 字段ID  默认为id
-   * @param pid 父节点字端  默认为pid
-   * @param children 子节点的字段 默认为children
-   * @param rootId 根节点的ID  默认为0
-   */
+ * 构造树的数据结构
+ * @param data 要构造的数据源
+ * @param id 字段ID  默认为id
+ * @param pid 父节点字端  默认为pid
+ * @param children 子节点的字段 默认为children
+ * @param rootId 根节点的ID  默认为0
+ */
 export function handleTree(data, id, pid, children, rootId) {
   id = id || 'id'
   pid = pid || 'pid'
@@ -48,7 +48,7 @@ export function handleTree(data, id, pid, children, rootId) {
     const branchArr = cloneData.filter(child => {
       return father[id] === child[pid]
     })
-    branchArr.length > 0 ? father.children = branchArr : ''
+    branchArr.length > 0 ? (father.children = branchArr) : ''
     // 返回上一层
     return father[pid] === rootId
   })

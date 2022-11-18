@@ -14,7 +14,7 @@ const getDefaultState = () => {
 const state = getDefaultState()
 
 const mutations = {
-  RESET_STATE: (state) => {
+  RESET_STATE: state => {
     Object.assign(state, getDefaultState())
   },
   SET_TOKEN: (state, token) => {
@@ -36,44 +36,50 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username, password: password }).then(res => {
-        // 放到 Vuex
-        commit('SET_TOKEN', res.data)
-        setToken(res.data)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      login({ username: username, password: password })
+        .then(res => {
+          // 放到 Vuex
+          commit('SET_TOKEN', res.data)
+          setToken(res.data)
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
 
   // 获取用户信息
   getInfo({ commit }) {
     return new Promise((resolve, reject) => {
-      getInfo().then(res => {
-        const { data } = res
-        const { username, header, userId } = data
-        commit('SET_NAME', username)
-        commit('SET_HEADER', header)
-        commit('SET_USERID', userId)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+      getInfo()
+        .then(res => {
+          const { data } = res
+          const { username, header, userId } = data
+          commit('SET_NAME', username)
+          commit('SET_HEADER', header)
+          commit('SET_USERID', userId)
+          resolve(data)
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
 
   // 退出登录
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      logout(state.token)
+        .then(() => {
+          removeToken() // must remove  token  first
+          resetRouter()
+          commit('RESET_STATE')
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
 
@@ -93,4 +99,3 @@ export default {
   mutations,
   actions
 }
-

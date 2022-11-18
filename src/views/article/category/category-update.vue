@@ -14,22 +14,13 @@
       </el-form-item>
       <el-form-item label="父级">
         <el-select v-model="category.pid" placeholder="父级分类" clearable filterable>
-          <el-option
-            :key="category.pid"
-            :value="category.pid"
-          />
+          <el-option :key="category.pid" :value="category.pid" />
         </el-select>
       </el-form-item>
       <el-form-item label="封面">
-        <el-upload
-          class="avatar-uploader"
-          :action="uploadUrl"
-          :show-file-list="false"
-          :on-success="uploadSuccess"
-          :headers="headers"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        <el-upload class="avatar-uploader" :action="uploadUrl" :show-file-list="false" :on-success="uploadSuccess" :headers="headers">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
       <el-form-item>
@@ -55,12 +46,14 @@ export default {
     return {
       imageUrl: this.category.categoryImage, // 上传图片回显
       uploadUrl: process.env.VUE_APP_UPLOAD_URL, // 上传图片路径
-      headers: { // 上传文件的请求头
+      headers: {
+        // 上传文件的请求头
         Authorization: getToken()
       }
     }
   },
-  watch: { // 监听器这里的function不能使用箭头函数替代
+  watch: {
+    // 监听器这里的function不能使用箭头函数替代
     'category.categoryImage': function(newVal, oldVal) {
       this.imageUrl = newVal
     }
@@ -75,9 +68,7 @@ export default {
       categoryApi.update(this.category).then(res => {
         this.$message.success(res.msg)
         this.$emit('closeUpdateDialog')
-        this.$emit('getByPage').then(
-          this.imageUrl = null
-        )
+        this.$emit('getByPage').then((this.imageUrl = null))
       })
     },
     uploadSuccess(res, file) {

@@ -5,13 +5,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="上级菜单" prop="name">
-            <treeselect
-              v-model="menu.pid"
-              :options="menuOptions"
-              :show-count="true"
-              :normalizer="normalizer"
-              placeholder="请选择上级菜单"
-            />
+            <treeselect v-model="menu.pid" :options="menuOptions" :show-count="true" :normalizer="normalizer" placeholder="请选择上级菜单" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -84,24 +78,12 @@ export default {
       menuOptions: [],
       // 表单校验
       rules: {
-        menuId: [
-          { required: true, message: '权限Id不能为空', tirgger: 'blur' }
-        ],
-        name: [
-          { required: true, message: '权限名称不能为空', tirgger: 'blur' }
-        ],
-        permission: [
-          { required: true, message: '权限标识不能为空', tirgger: 'blur' }
-        ],
-        path: [
-          { required: true, message: '权限路径不能为空', tirgger: 'blur' }
-        ],
-        level: [
-          { required: true, message: '请选择权限级别', tirgger: 'change' }
-        ],
-        isEnabled: [
-          { required: true, message: '请选择权限状态', trigger: 'change' }
-        ]
+        menuId: [{ required: true, message: '权限Id不能为空', tirgger: 'blur' }],
+        name: [{ required: true, message: '权限名称不能为空', tirgger: 'blur' }],
+        permission: [{ required: true, message: '权限标识不能为空', tirgger: 'blur' }],
+        path: [{ required: true, message: '权限路径不能为空', tirgger: 'blur' }],
+        level: [{ required: true, message: '请选择权限级别', tirgger: 'change' }],
+        isEnabled: [{ required: true, message: '请选择权限状态', trigger: 'change' }]
       }
     }
   },

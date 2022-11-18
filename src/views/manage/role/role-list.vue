@@ -2,13 +2,7 @@
   <!-- 加载 -->
   <div>
     <el-button type="primary" icon="el-icon-plus" class="add-button" size="mini" @click="openAddDialog">添加</el-button>
-    <el-table
-      v-loading="loading"
-      :data="rolelist"
-      border
-      fit
-      style="width: 100%"
-    >
+    <el-table v-loading="loading" :data="rolelist" border fit style="width: 100%">
       <!-- 展开列 -->
       <el-table-column type="expand">
         <template slot-scope="scope">
@@ -17,18 +11,18 @@
             <!-- 渲染一级权限 -->
             <el-col :span="5">
               <el-tag closable @close="removeRightById(scope.row, item1.id)">{{ item1.name }}</el-tag>
-              <i class="el-icon-caret-right" />
+              <i class="el-icon-caret-right"></i>
             </el-col>
             <!-- 渲染二,三级级权限 -->
             <el-col :span="19">
               <!-- 通过for循环嵌套渲染二级权限 -->
-              <el-row v-for="(item2, i2) in item1.childList" :key="item2.id" :class="[i2 === 0 ? '':'bdtop', 'vcenter']">
+              <el-row v-for="(item2, i2) in item1.childList" :key="item2.id" :class="[i2 === 0 ? '' : 'bdtop', 'vcenter']">
                 <el-col :span="6">
                   <el-tag type="success" closable @close="removeRightById(scope.row, item2.id)">{{ item2.name }}</el-tag>
-                  <i class="el-icon-caret-right" />
+                  <i class="el-icon-caret-right"></i>
                 </el-col>
                 <el-col :span="18">
-                  <el-tag v-for="(item3) in item2.childList" :key="item3.id" type="warning" closable @close="removeRightById(scope.row, item3.id)">
+                  <el-tag v-for="item3 in item2.childList" :key="item3.id" type="warning" closable @close="removeRightById(scope.row, item3.id)">
                     {{ item3.name }}
                   </el-tag>
                 </el-col>
@@ -59,22 +53,8 @@
     </el-table>
 
     <!-- 分配权限和菜单弹出层开始 -->
-    <el-dialog
-      title="分配权限和菜单"
-      :visible.sync="selectMenuOpen"
-      width="400px"
-      center
-      append-to-body
-    >
-      <el-tree
-        ref="menu"
-        :data="menuOptions"
-        show-checkbox
-        node-key="menuId"
-        highlight-current
-        empty-text="加载中，请稍后"
-        :props="{id:'menuId',children:'children',label:'name'}"
-      />
+    <el-dialog title="分配权限和菜单" :visible.sync="selectMenuOpen" width="400px" center append-to-body>
+      <el-tree ref="menu" :data="menuOptions" show-checkbox node-key="menuId" highlight-current empty-text="加载中，请稍后" :props="{ id: 'menuId', children: 'children', label: 'name' }" />
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSelectMenuSubmit">确 定</el-button>
         <el-button @click="cancelSelectMenu">取 消</el-button>
@@ -86,14 +66,10 @@
     <el-dialog title="添加角色" :visible.sync="addDialog" width="600px" center>
       <role-add @closeAddDialog="closeAddDialog" @list="list" />
     </el-dialog>
-    <!--
-      修改弹窗
-      :model="model" 用于传递参数对象
-    -->
+    <!-- 修改弹窗 :model="model" 用于传递参数对象 -->
     <el-dialog title="修改角色" :visible.sync="updateDialog" width="600px" center>
       <role-update :role="role" @closeUpdateDialog="closeUpdateDialog" @list="list" />
     </el-dialog>
-
   </div>
 </template>
 
@@ -152,17 +128,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        roleApi.enable(roleId).then(res => {
-          this.$message.success(res.msg)
-          this.list()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消启用'
-        })
       })
+        .then(() => {
+          roleApi.enable(roleId).then(res => {
+            this.$message.success(res.msg)
+            this.list()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消启用'
+          })
+        })
     },
     // 弃用
     toDisable(roleId) {
@@ -170,17 +148,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        roleApi.disable(roleId).then(res => {
-          this.$message.success(res.msg)
-          this.list()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消弃用'
-        })
       })
+        .then(() => {
+          roleApi.disable(roleId).then(res => {
+            this.$message.success(res.msg)
+            this.list()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消弃用'
+          })
+        })
     },
     // 删除
     toDelete(roleId) {
@@ -188,17 +168,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        roleApi.delete(roleId).then(res => {
-          this.$message.success(res.msg)
-          this.list()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          roleApi.delete(roleId).then(res => {
+            this.$message.success(res.msg)
+            this.list()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     removeRightById() {},
     // 打开分配权限和菜单的弹出层
@@ -224,11 +206,14 @@ export default {
       // 组合成最后的keys
       const finalKey = halfCheckKeys.concat(checkedKeys)
       console.log(finalKey)
-      roleApi.saveRoleMenu(this.currentRoleId, finalKey).then(res => {
-        this.msgSuccess('分配成功')
-      }).catch(() => {
-        this.msgSuccess('分配失败')
-      })
+      roleApi
+        .saveRoleMenu(this.currentRoleId, finalKey)
+        .then(res => {
+          this.msgSuccess('分配成功')
+        })
+        .catch(() => {
+          this.msgSuccess('分配失败')
+        })
     },
     // 关闭分配权限和菜单的弹出层
     cancelSelectMenu() {
@@ -253,21 +238,19 @@ export default {
 </script>
 
 <style scoped>
+.el-tag {
+  margin: 7px;
+}
+.bdtop {
+  border-top: 1px solid #eeeeee;
+}
 
-    .el-tag{
-        margin: 7px;
-    }
-    .bdtop{
-        border-top: 1px solid #eeeeee ;
-    }
+.bdbottom {
+  border-bottom: 1px solid #eeeeee;
+}
 
-    .bdbottom{
-        border-bottom: 1px solid #eeeeee;
-    }
-
-    .vcenter{
-        display: flex;
-        align-items: center;
-    }
-
+.vcenter {
+  display: flex;
+  align-items: center;
+}
 </style>

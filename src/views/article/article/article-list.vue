@@ -1,7 +1,6 @@
 <template>
   <!-- 加载 -->
   <div>
-
     <!-- 搜索栏 模糊查询-->
     <el-form :inline="true" :model="page" class="demo-form-inline" size="mini">
       <el-form-item label="文章标题">
@@ -9,12 +8,7 @@
       </el-form-item>
       <el-form-item label="分类">
         <el-select v-model="page.params.articleCategory" placeholder="分类" clearable filterable>
-          <el-option
-            v-for="item in categoryList"
-            :key="item.categoryName"
-            :label="item.categoryName"
-            :value="item.categoryId"
-          />
+          <el-option v-for="item in categoryList" :key="item.categoryName" :label="item.categoryName" :value="item.categoryId" />
         </el-select>
       </el-form-item>
       <el-form-item label="起始日期">
@@ -47,24 +41,14 @@
       3. @selection-change="handleSelectionChange" selection-change	当选择项发生变化时会触发该事件
       4. @sort-change="changeSort" sort-change 事件回中可以获取当前排序的字段名[prop]和排序顺序[order]
      -->
-    <el-table
-      v-loading="loading"
-      :data="page.list"
-      border
-      style="width: 100%"
-      @sort-change="changeSort"
-    >
+    <el-table v-loading="loading" :data="page.list" border style="width: 100%" @sort-change="changeSort">
       <el-table-column type="index" fixed="left" label="#" min-width="60" align="center" />
       <el-table-column prop="articleTitle" align="center" label="标题" width="200" show-overflow-tooltip />
       <el-table-column prop="categoryName" label="分类" min-width="120" align="center" />
       <el-table-column prop="authorName" label="作者" min-width="120" align="center" />
       <el-table-column prop="articleImage" label="图片" width="120" align="center">
         <template slot-scope="scope">
-          <el-image
-            style="width: 100%;height: 50px"
-            :src="scope.row.articleImage"
-            :preview-src-list="[scope.row.articleImage]"
-          />
+          <el-image style="width: 100%;height: 50px" :src="scope.row.articleImage" :preview-src-list="[scope.row.articleImage]" />
         </template>
       </el-table-column>
       <el-table-column prop="goodCount" label="点赞数" width="100" sortable="custom" align="center" />
@@ -86,7 +70,7 @@
           <el-dropdown>
             <el-button type="primary" size="mini">
               操作
-              <i class="el-icon-arrow-down el-icon--right" />
+              <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
@@ -124,7 +108,7 @@
       align="center"
       class="pagination"
       :current-page="page.currentPage"
-      :page-sizes="[5,10,20,50]"
+      :page-sizes="[5, 10, 20, 50]"
       :page-size="page.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="page.totalCount"
@@ -144,9 +128,8 @@
     </el-dialog>
     <!-- 阅读弹窗 -->
     <el-dialog title="文章内容" :visible.sync="readDialog" width="80%">
-      <div v-html="article.articleContent" />
+      <div v-html="article.articleContent"></div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -165,31 +148,35 @@ export default {
   data() {
     return {
       pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
+        shortcuts: [
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
           }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-            picker.$emit('pick', [start, end])
-          }
-        }]
+        ]
       },
       articleTime: {},
       // 定义page对象
@@ -293,17 +280,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        articleApi.enable(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消启用'
-        })
       })
+        .then(() => {
+          articleApi.enable(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消启用'
+          })
+        })
     },
     // 弃用
     toDisable(id) {
@@ -311,17 +300,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        articleApi.disable(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消弃用'
-        })
       })
+        .then(() => {
+          articleApi.disable(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消弃用'
+          })
+        })
     },
     // 删除
     toDelete(id) {
@@ -329,17 +320,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        articleApi.delete(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          articleApi.delete(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
 
     // 模块功能组件

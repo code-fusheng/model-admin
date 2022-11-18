@@ -5,9 +5,11 @@ export function login(data) {
     url: `/login?username=${data.username}&password=${data.password}`,
     // url: `/login?username=admin&password=123456`,
     method: 'post',
-    transformResponse: [function(data) {
-      return JSON.parse(data)
-    }]
+    transformResponse: [
+      function(data) {
+        return JSON.parse(data)
+      }
+    ]
   })
 }
 

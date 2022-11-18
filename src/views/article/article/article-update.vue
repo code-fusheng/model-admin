@@ -7,24 +7,13 @@
       </el-form-item>
       <el-form-item label="分类" style="width: 20%">
         <el-select v-model="article.articleCategory" clearable filterable placeholder="请选择" style="width: 100%">
-          <el-option
-            v-for="category in categoryList"
-            :key="category.categoryId"
-            :label="category.categoryName"
-            :value="category.categoryId"
-          />
+          <el-option v-for="category in categoryList" :key="category.categoryId" :label="category.categoryName" :value="category.categoryId" />
         </el-select>
       </el-form-item>
       <el-form-item label="封面">
-        <el-upload
-          class="avatar-uploader"
-          :action="uploadUrl"
-          :show-file-list="false"
-          :on-success="uploadSuccess"
-          :headers="headers"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        <el-upload class="avatar-uploader" :action="uploadUrl" :show-file-list="false" :on-success="uploadSuccess" :headers="headers">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
       <el-form-item label="描述">
@@ -59,7 +48,8 @@ export default {
   data() {
     return {
       imageUrl: this.article.articleImage, // 上传图片回显
-      headers: { // 上传文件的请求头
+      headers: {
+        // 上传文件的请求头
         Authorization: getToken()
       },
       uploadUrl: process.env.VUE_APP_UPLOAD_URL, // 上传图片路径
@@ -76,9 +66,7 @@ export default {
       articleApi.update(this.article).then(res => {
         this.$message.success(res.msg)
         this.$emit('closeUpdateDialog')
-        this.$emit('getByPage').then(
-          this.imageUrl = null
-        )
+        this.$emit('getByPage').then((this.imageUrl = null))
       })
     },
     uploadSuccess(res, file) {

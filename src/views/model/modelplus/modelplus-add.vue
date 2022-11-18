@@ -6,15 +6,9 @@
         <el-input v-model="modelPlus.modelPlusName" />
       </el-form-item>
       <el-form-item label="模版图片">
-        <el-upload
-          class="avatar-uploader"
-          :action="uploadUrl"
-          :show-file-list="false"
-          :on-success="uploadSuccess"
-          :headers="headers"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        <el-upload class="avatar-uploader" :action="uploadUrl" :show-file-list="false" :on-success="uploadSuccess" :headers="headers">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
       <el-form-item>
@@ -34,7 +28,8 @@ export default {
       modelPlus: {},
       imageUrl: null, // 上传图片回显
       uploadUrl: process.env.VUE_APP_UPLOAD_URL, // 上传图片路径
-      headers: { // 上传文件的请求头
+      headers: {
+        // 上传文件的请求头
         Authorization: getToken()
       }
     }
@@ -67,27 +62,26 @@ export default {
 
 <style>
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 300px;
-    height: 150px;
-    line-height: 150px;
-    text-align: center;
-  }
-  .avatar {
-    width: 300px;
-    height: 150px;
-    display: block;
-  }
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 300px;
+  height: 150px;
+  line-height: 150px;
+  text-align: center;
+}
+.avatar {
+  width: 300px;
+  height: 150px;
+  display: block;
+}
 </style>
-

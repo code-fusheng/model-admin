@@ -1,5 +1,4 @@
 module.exports = {
-
   title: 'model-admin',
 
   /**

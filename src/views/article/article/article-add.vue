@@ -7,24 +7,13 @@
       </el-form-item>
       <el-form-item label="分类">
         <el-select v-model="article.articleCategory" placeholder="分类" clearable filterable>
-          <el-option
-            v-for="category in categoryList"
-            :key="category.categoryId"
-            :label="category.categoryName"
-            :value="category.categoryId"
-          />
+          <el-option v-for="category in categoryList" :key="category.categoryId" :label="category.categoryName" :value="category.categoryId" />
         </el-select>
       </el-form-item>
       <el-form-item label="封面">
-        <el-upload
-          class="avatar-uploader"
-          :action="uploadUrl"
-          :show-file-list="false"
-          :on-success="uploadSuccess"
-          :headers="headers"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        <el-upload class="avatar-uploader" :action="uploadUrl" :show-file-list="false" :on-success="uploadSuccess" :headers="headers">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
       <el-form-item label="描述">
@@ -56,7 +45,8 @@ export default {
       article: {},
       imageUrl: null, // 上传图片回显
       uploadUrl: process.env.VUE_APP_UPLOAD_URL, // 上传图片路径
-      headers: { // 上传文件的请求头
+      headers: {
+        // 上传文件的请求头
         Authorization: getToken()
       },
       categoryList: this.$store.getters.categoryList
@@ -94,34 +84,34 @@ export default {
 </script>
 
 <style>
-.write-article-container  {
-    /* padding: 20px; */
-    width: 100%;
-    min-height: 800px;
-    /* border: 1px solid #9c9ea8; */
-    background-color: white;
-  }
+.write-article-container {
+  /* padding: 20px; */
+  width: 100%;
+  min-height: 800px;
+  /* border: 1px solid #9c9ea8; */
+  background-color: white;
+}
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 300px;
-    height: 150px;
-    line-height: 150px;
-    text-align: center;
-  }
-  .avatar {
-    width: 300px;
-    height: 150px;
-    display: block;
-  }
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 300px;
+  height: 150px;
+  line-height: 150px;
+  text-align: center;
+}
+.avatar {
+  width: 300px;
+  height: 150px;
+  display: block;
+}
 </style>

@@ -6,15 +6,9 @@
         <el-input v-model="modelPlus.modelPlusName" />
       </el-form-item>
       <el-form-item label="模版图片">
-        <el-upload
-          class="avatar-uploader"
-          :action="uploadUrl"
-          :show-file-list="false"
-          :on-success="uploadSuccess"
-          :headers="headers"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        <el-upload class="avatar-uploader" :action="uploadUrl" :show-file-list="false" :on-success="uploadSuccess" :headers="headers">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
       <el-form-item>
@@ -40,12 +34,14 @@ export default {
     return {
       imageUrl: this.modelPlus.modelPlusImage, // 上传图片回显
       uploadUrl: process.env.VUE_APP_UPLOAD_URL, // 上传图片路径
-      headers: { // 上传文件的请求头
+      headers: {
+        // 上传文件的请求头
         Authorization: getToken()
       }
     }
   },
-  watch: { // 监听器这里的function不能使用箭头函数替代
+  watch: {
+    // 监听器这里的function不能使用箭头函数替代
     'modelPlus.modelPlusImage': function(newVal, oldVal) {
       this.imageUrl = newVal
     }

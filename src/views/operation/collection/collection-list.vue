@@ -1,7 +1,6 @@
 <template>
   <!-- 加载 -->
   <div>
-
     <!-- 搜索栏 模糊查询-->
     <el-form :inline="true" :model="page" class="demo-form-inline" size="mini">
       <el-form-item label="模糊查询">
@@ -45,20 +44,8 @@
       3. @selection-change="handleSelectionChange" selection-change	当选择项发生变化时会触发该事件
       4. @sort-change="changeSort" sort-change 事件回中可以获取当前排序的字段名[prop]和排序顺序[order]
      -->
-    <el-table
-      v-loading="loading"
-      :data="page.list"
-      border
-      fit
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-      @sort-change="changeSort"
-    >
-      <el-table-column
-        type="selection"
-        align="center"
-        width="45"
-      />
+    <el-table v-loading="loading" :data="page.list" border fit style="width: 100%" @selection-change="handleSelectionChange" @sort-change="changeSort">
+      <el-table-column type="selection" align="center" width="45" />
       <el-table-column type="index" fixed="left" label="#" min-width="60" align="center" />
       <el-table-column prop="targetDesc" label="收藏内容" min-width="300" align="center" show-overflow-tooltip />
       <el-table-column prop="collectionTarget" label="收藏目标id" min-width="150" align="center" />
@@ -94,7 +81,7 @@
       align="center"
       class="pagination"
       :current-page="page.currentPage"
-      :page-sizes="[5,10,20,50]"
+      :page-sizes="[5, 10, 20, 50]"
       :page-size="page.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="page.totalCount"
@@ -111,31 +98,35 @@ export default {
   data() {
     return {
       pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
+        shortcuts: [
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
           }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-            picker.$emit('pick', [start, end])
-          }
-        }]
+        ]
       },
       collectionTime: {},
       // 定义page对象
@@ -205,21 +196,23 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'error'
-      }).then(() => {
-        const ids = []
-        this.selectcollections.forEach(e => {
-          ids.push(e.modelId)
-        })
-        collectionApi.deleteByIds(ids).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          const ids = []
+          this.selectcollections.forEach(e => {
+            ids.push(e.modelId)
+          })
+          collectionApi.deleteByIds(ids).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     // 操作部分相关方法
     // 修改
@@ -239,17 +232,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        collectionApi.enable(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消启用'
-        })
       })
+        .then(() => {
+          collectionApi.enable(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消启用'
+          })
+        })
     },
     // 弃用
     toDisable(id) {
@@ -257,17 +252,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        collectionApi.disable(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消弃用'
-        })
       })
+        .then(() => {
+          collectionApi.disable(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消弃用'
+          })
+        })
     },
     // 删除
     toDelete(id) {
@@ -275,17 +272,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        collectionApi.delete(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          collectionApi.delete(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     // 条件搜索
     search() {

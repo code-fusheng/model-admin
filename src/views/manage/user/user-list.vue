@@ -50,19 +50,8 @@
       3. @selection-change="handleSelectionChange" selection-change	当选择项发生变化时会触发该事件
       4. @sort-change="changeSort" sort-change 事件回中可以获取当前排序的字段名[prop]和排序顺序[order]
      -->
-    <el-table
-      v-loading="loading"
-      :data="page.list"
-      border
-      fit
-      style="width: 100%"
-      @sort-change="changeSort"
-    >
-      <el-table-column
-        type="selection"
-        align="center"
-        width="45"
-      />
+    <el-table v-loading="loading" :data="page.list" border fit style="width: 100%" @sort-change="changeSort">
+      <el-table-column type="selection" align="center" width="45" />
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -94,11 +83,7 @@
       </el-table-column>
       <el-table-column prop="header" label="头像" align="center" width="60">
         <template slot-scope="scope">
-          <el-image
-            style="width: 100%;height: 40px"
-            :src="scope.row.header"
-            :preview-src-list="[scope.row.header]"
-          />
+          <el-image style="width: 100%;height: 40px" :src="scope.row.header" :preview-src-list="[scope.row.header]" />
         </template>
       </el-table-column>
       <el-table-column prop="createdTime" label="创建时间" min-width="220" align="center" sortable="custom" />
@@ -111,7 +96,7 @@
       </el-table-column>
       <el-table-column label="操作" width="400" align="center">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.userId!=1" type="success" icon="el-icon-thumb" size="mini" @click="handleSelectRole(scope.row)">分配角色</el-button>
+          <el-button v-if="scope.row.userId != 1" type="success" icon="el-icon-thumb" size="mini" @click="handleSelectRole(scope.row)">分配角色</el-button>
           <el-button size="mini" type="primary" icon="el-icon-edit" @click="toUpdate(scope.row.userId)">修改</el-button>
           <el-button v-if="scope.row.isEnabled === 0" icon="el-icon-check" size="mini" type="success" @click="toEnable(scope.row.userId)">启用</el-button>
           <el-button v-if="scope.row.isEnabled === 1 && scope.row.userId != 1" icon="el-icon-close" size="mini" type="warning" @click="toDisable(scope.row.userId)">弃用</el-button>
@@ -135,7 +120,7 @@
       align="center"
       class="pagination"
       :current-page="page.currentPage"
-      :page-sizes="[5,10,20,50]"
+      :page-sizes="[5, 10, 20, 50]"
       :page-size="page.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="page.totalCount"
@@ -143,19 +128,8 @@
       @current-change="handleCurrentChange"
     />
     <!-- 分配角色的弹出层开始 -->
-    <el-dialog
-      title="分配角色"
-      :visible.sync="selectRoleOpen"
-      width="900px"
-      center
-      append-to-body
-    >
-      <el-table
-        ref="roleListTable"
-        border
-        :data="roleTableList"
-        @selection-change="handleRoleTableSelectionChange"
-      >
+    <el-dialog title="分配角色" :visible.sync="selectRoleOpen" width="900px" center append-to-body>
+      <el-table ref="roleListTable" border :data="roleTableList" @selection-change="handleRoleTableSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="角色ID" align="center" prop="roleId" />
         <el-table-column label="角色名称" align="center" prop="roleName" />
@@ -180,7 +154,6 @@
     <el-dialog title="修改用户" :visible.sync="updateDialog" width="800px" center>
       <user-update :user="user" @closeUpdateDialog="closeUpdateDialog" @getByPage="getByPage" />
     </el-dialog>
-
   </div>
 </template>
 
@@ -200,31 +173,35 @@ export default {
   data() {
     return {
       pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
+        shortcuts: [
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
           }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-            picker.$emit('pick', [start, end])
-          }
-        }]
+        ]
       },
       // 非单个禁用
       single: true,
@@ -308,21 +285,23 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'error'
-      }).then(() => {
-        const ids = []
-        this.selectusers.forEach(e => {
-          ids.push(e.modelId)
-        })
-        userApi.deleteByIds(ids).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          const ids = []
+          this.selectusers.forEach(e => {
+            ids.push(e.modelId)
+          })
+          userApi.deleteByIds(ids).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     // 操作部分相关方法
     // 修改
@@ -342,17 +321,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        userApi.enable(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消启用'
-        })
       })
+        .then(() => {
+          userApi.enable(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消启用'
+          })
+        })
     },
     // 弃用
     toDisable(id) {
@@ -360,17 +341,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        userApi.disable(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消弃用'
-        })
       })
+        .then(() => {
+          userApi.disable(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消弃用'
+          })
+        })
     },
     // 删除
     toDelete(id) {
@@ -378,17 +361,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        userApi.delete(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          userApi.delete(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     // 恢复搜索框
     refresh() {
@@ -429,11 +414,14 @@ export default {
     },
     // 保存用户和角色之间的关系
     handleSaveUserRoleSubmit() {
-      roleApi.saveUserRole(this.currentUserId, this.roleIds).then(res => {
-        this.msgSuccess('分配成功')
-      }).catch(function() {
-        this.msgError('分配失败')
-      })
+      roleApi
+        .saveUserRole(this.currentUserId, this.roleIds)
+        .then(res => {
+          this.msgSuccess('分配成功')
+        })
+        .catch(function() {
+          this.msgError('分配失败')
+        })
     },
     // 模块功能组件
     openAddDialog() {
@@ -453,19 +441,19 @@ export default {
 </script>
 
 <style scoped>
-  .demo-form-inline {
-    padding-top: 10px;
-  }
-  .demo-table-expand {
-    font-size: 0;
-  }
-  .demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-  }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
+.demo-form-inline {
+  padding-top: 10px;
+}
+.demo-table-expand {
+  font-size: 0;
+}
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}
 </style>

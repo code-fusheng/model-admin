@@ -40,12 +40,8 @@ export default {
       role: {},
       // 表单校验
       rules: {
-        roleName: [
-          { required: true, message: '角色名称不能为空', tirgger: 'blur' }
-        ],
-        isEnabled: [
-          { required: true, message: '请选择角色状态', trigger: 'change' }
-        ]
+        roleName: [{ required: true, message: '角色名称不能为空', tirgger: 'blur' }],
+        isEnabled: [{ required: true, message: '请选择角色状态', trigger: 'change' }]
       }
     }
   },

@@ -42,14 +42,7 @@
       3. @selection-change="handleSelectionChange" selection-change	当选择项发生变化时会触发该事件
       4. @sort-change="changeSort" sort-change 事件回中可以获取当前排序的字段名[prop]和排序顺序[order]
      -->
-    <el-table
-      v-loading="loading"
-      :data="page.list"
-      border
-      fit
-      style="width: 100%"
-      @sort-change="changeSort"
-    >
+    <el-table v-loading="loading" :data="page.list" border fit style="width: 100%" @sort-change="changeSort">
       <el-table-column prop="menuId" label="权限Id" width="100" align="center" sortable="custom" fixed="left" />
       <el-table-column prop="name" label="权限名称" min-width="180" align="center" />
       <el-table-column prop="permission" label="权限标识" min-width="180" align="center" />
@@ -95,7 +88,7 @@
       align="center"
       class="pagination"
       :current-page="page.currentPage"
-      :page-sizes="[5,10,20,50]"
+      :page-sizes="[5, 10, 20, 50]"
       :page-size="page.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="page.totalCount"
@@ -113,7 +106,6 @@
     <el-dialog title="添加权限" :visible.sync="addDialog" width="600px" center>
       <menu-add @closeAddDialog="closeAddDialog" @getByPage="getByPage" />
     </el-dialog>
-
   </div>
 </template>
 
@@ -132,31 +124,35 @@ export default {
   data() {
     return {
       pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
+        shortcuts: [
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
           }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-            picker.$emit('pick', [start, end])
-          }
-        }]
+        ]
       },
       menuTime: {},
       // 定义page对象
@@ -235,17 +231,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        menuApi.enable(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消启用'
-        })
       })
+        .then(() => {
+          menuApi.enable(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消启用'
+          })
+        })
     },
     // 弃用
     toDisable(id) {
@@ -253,17 +251,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        menuApi.disable(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消弃用'
-        })
       })
+        .then(() => {
+          menuApi.disable(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消弃用'
+          })
+        })
     },
     // 删除
     toDelete(id) {
@@ -271,17 +271,19 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        menuApi.delete(id).then(res => {
-          this.$message.success(res.msg)
-          this.getByPage()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
+        .then(() => {
+          menuApi.delete(id).then(res => {
+            this.$message.success(res.msg)
+            this.getByPage()
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     // 恢复搜索框
     refresh() {

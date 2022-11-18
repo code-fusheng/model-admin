@@ -62,15 +62,9 @@
         </el-col>
         <el-col>
           <el-form-item label="用户头像">
-            <el-upload
-              class="avatar-uploader"
-              :action="uploadUrl"
-              :show-file-list="false"
-              :on-success="uploadSuccess"
-              :headers="headers"
-            >
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon" />
+            <el-upload class="avatar-uploader" :action="uploadUrl" :show-file-list="false" :on-success="uploadSuccess" :headers="headers">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
         </el-col>
@@ -94,26 +88,17 @@ export default {
       user: {},
       imageUrl: null, // 上传图片回显
       uploadUrl: process.env.VUE_APP_UPLOAD_URL, // 上传图片路径
-      headers: { // 上传文件的请求头
+      headers: {
+        // 上传文件的请求头
         Authorization: getToken()
       },
       // 表单校验
       rules: {
-        username: [
-          { required: true, message: '用户名称不能为空', tirgger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '用户密码不能为空', tirgger: 'blur' }
-        ],
-        phone: [
-          { required: true, message: '手机号码不能为空', tirgger: 'blur' }
-        ],
-        sex: [
-          { required: true, message: '请选择用户性别', trigger: 'change' }
-        ],
-        isEnabled: [
-          { required: true, message: '请选择用户状态', trigger: 'change' }
-        ]
+        username: [{ required: true, message: '用户名称不能为空', tirgger: 'blur' }],
+        password: [{ required: true, message: '用户密码不能为空', tirgger: 'blur' }],
+        phone: [{ required: true, message: '手机号码不能为空', tirgger: 'blur' }],
+        sex: [{ required: true, message: '请选择用户性别', trigger: 'change' }],
+        isEnabled: [{ required: true, message: '请选择用户状态', trigger: 'change' }]
       }
     }
   },
@@ -145,27 +130,26 @@ export default {
 
 <style>
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 150px;
-    height: 150px;
-    line-height: 150px;
-    text-align: center;
-  }
-  .avatar {
-    width: 150px;
-    height: 150px;
-    display: block;
-  }
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 150px;
+  height: 150px;
+  line-height: 150px;
+  text-align: center;
+}
+.avatar {
+  width: 150px;
+  height: 150px;
+  display: block;
+}
 </style>
-
